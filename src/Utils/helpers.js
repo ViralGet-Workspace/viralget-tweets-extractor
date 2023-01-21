@@ -72,3 +72,8 @@ export const getBase64 = (img, callback) => {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 };
+
+
+export const sleep = async (seconds) => {
+    return await new Promise(r => setTimeout(r, seconds));
+}
