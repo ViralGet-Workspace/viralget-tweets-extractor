@@ -26,7 +26,7 @@ export default class TwitterService {
 
         url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
 
-        console.log({ url, searchQuery })
+        // console.log({ url, searchQuery })
 
         return await this.api.get(url, true);
     }

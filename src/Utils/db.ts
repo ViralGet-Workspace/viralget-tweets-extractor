@@ -1,12 +1,15 @@
-import pkg from 'pg';
-const { Client } = pkg;
+// import pkg from 'pg';
+// const { Client } = pkg;
+
+import mysql from 'mysql2';
 
 class Db {
 
     private client;
 
     constructor() {
-        this.client = new Client({
+        // this.client = new Client({
+        this.client = mysql.createConnection({
             user: process.env.DB_USER,
             host: process.env.DB_HOST,
             database: process.env.DB_NAME,
@@ -28,7 +31,7 @@ class Db {
     async query(query: queryFormat) {
 
         try {
-            const res = await this.client.query(query);
+            const res = await this.client.execute(query.text, query.values);
 
             return res.rows;
         } catch (e) {

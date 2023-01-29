@@ -45,16 +45,22 @@ source_map_support_1.default.install();
 dotenv.config();
 const port = 8000;
 const app = (0, express_1.default)();
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const twitterExtractor = new TwitterExtractorMainController_js_1.default();
-    const response = yield twitterExtractor.handleFetchInfluencers('coding');
-    // const db = new Db();
-    // const result = await db.query('SELECT * FROM twitter_influencers');
-    // const api = new API;
-    // const result = await api.get('https://google.com');
-    console.log({ response });
-    res.send('hello world');
-}));
+const twitterExtractor = new TwitterExtractorMainController_js_1.default();
+function runCode() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield twitterExtractor.handleFetchInfluencers('fashion');
+    });
+}
+runCode();
+// app.get('/', async (req, res) => {
+//     const twitterExtractor = new TwitterExtractorMainController();
+//     const response = await twitterExtractor.handleFetchInfluencers('family');
+//     // const db = new Db();
+//     // const result = await db.query('SELECT * FROM twitter_influencers');
+//     // const api = new API;
+//     // const result = await api.get('https://google.com');
+//     res.send('hello world')
+// })
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

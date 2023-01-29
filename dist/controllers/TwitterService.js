@@ -35,7 +35,7 @@ class TwitterService {
                 url += `&geocode=${geocode}`;
             }
             url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
-            console.log({ url, searchQuery });
+            // console.log({ url, searchQuery })
             return yield this.api.get(url, true);
         });
     }

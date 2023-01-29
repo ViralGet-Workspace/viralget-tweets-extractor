@@ -27,6 +27,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.0.1",
     "pg": "^8.8.0",
     "save-dev": "^0.0.1-security",
     "source-map-support": "^0.5.21",

@@ -12,22 +12,32 @@ const port = 8000;
 const app = express()
 
 
-app.get('/', async (req, res) => {
-    const twitterExtractor = new TwitterExtractorMainController();
+const twitterExtractor = new TwitterExtractorMainController();
 
-    const response = await twitterExtractor.handleFetchInfluencers('coding');
+async function runCode() {
+    await twitterExtractor.handleFetchInfluencers('fashion');
+}
 
-    // const db = new Db();
+runCode();
 
-    // const result = await db.query('SELECT * FROM twitter_influencers');
 
-    // const api = new API;
-    // const result = await api.get('https://google.com');
 
-    console.log({ response });
 
-    res.send('hello world')
-})
+// app.get('/', async (req, res) => {
+//     const twitterExtractor = new TwitterExtractorMainController();
+
+//     const response = await twitterExtractor.handleFetchInfluencers('family');
+
+//     // const db = new Db();
+
+//     // const result = await db.query('SELECT * FROM twitter_influencers');
+
+//     // const api = new API;
+//     // const result = await api.get('https://google.com');
+
+
+//     res.send('hello world')
+// })
 
 
 app.listen(port, () => {
