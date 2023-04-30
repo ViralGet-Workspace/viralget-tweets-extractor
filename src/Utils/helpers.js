@@ -27,7 +27,7 @@ export function encodeHTMLEntities(str) {
 }
 
 export function numberFormat(number) {
-    return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
+    return new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 });
 }
 
 export function nFormatter(num, digits = 1) {
@@ -74,6 +74,21 @@ export const getBase64 = (img, callback) => {
 };
 
 
-export const sleep = async (seconds) => {
+export const sleep = async (seconds = 5000) => {
     return await new Promise(r => setTimeout(r, seconds));
+}
+
+export const generateQueryUrl = (url, params) => {
+
+    if (params) {
+        let keys = Object.keys(params);
+        if (keys[0] && params[keys[0]]) {
+            url += `?${keys[0]}=${params[keys[0]]}`;
+        }
+
+        // console.log({ params, L: keys[0], p: params[keys[0]] })
+        keys.slice(1, keys.length).forEach((element) => url += `&${element}=${params[element]}`);
+    }
+
+    return url;
 }

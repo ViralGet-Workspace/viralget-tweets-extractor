@@ -27,15 +27,31 @@ class TwitterService {
         const authorization = `Bearer ${process.env.TWITTER_BEARER_TOKEN}`;
         this.api = new api_1.default(authorization);
     }
+    fetchFollowings(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `https://api.twitter.com/1.1/friends/list.json?cursor=-1&screen_name=${username}&skip_status=true&include_user_entities=false&count=200`;
+            // console.log({ url, searchQuery })
+            return yield this.api.get(url, true);
+        });
+    }
     fetchTweets(keyword, geocode, searchQuery) {
         return __awaiter(this, void 0, void 0, function* () {
             const baseUrl = `https://api.twitter.com/1.1/search/tweets.json`;
-            let url = `?q=${keyword}&count=100&result_type=top`;
+            let url = `?q=${keyword}&count=100`;
+            // let url = `?q=${keyword}&count=100&result_type=top`;
             if (geocode) {
                 url += `&geocode=${geocode}`;
             }
             url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
             // console.log({ url, searchQuery })
+            return yield this.api.get(url, true);
+        });
+    }
+    fetchUserTweets(username, searchQuery) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const baseUrl = `https://api.twitter.com/1.1/statuses/user_timeline.json`;
+            let url = `?screen_name=${username}&count=100&include_rts=false`;
+            url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
             return yield this.api.get(url, true);
         });
     }

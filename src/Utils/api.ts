@@ -48,6 +48,7 @@ class API {
   }
 
   async get(url: string, requireAuth: boolean) {
+    console.log({ url });
     try {
       let response = requireAuth
         ? await this.instance.get(url, this.getConfig())
@@ -103,12 +104,9 @@ class API {
   };
 
   handleResponse(response: any) {
-    return response.data;
 
-    return {
-      status: response.status,
-      data: response.data,
-    }
+
+    return response.data;
   }
 
   handleError(error: any) {

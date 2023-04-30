@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sleep = exports.getBase64 = exports.nairaSymbol = exports.formatMailTo = exports.redirectTo = exports.isMobile = exports.nFormatter = exports.numberFormat = exports.encodeHTMLEntities = exports.formatDate = exports.getFieldValue = exports.getEventValue = exports.generateSlug = exports.classNames = void 0;
+exports.generateQueryUrl = exports.sleep = exports.getBase64 = exports.nairaSymbol = exports.formatMailTo = exports.redirectTo = exports.isMobile = exports.nFormatter = exports.numberFormat = exports.encodeHTMLEntities = exports.formatDate = exports.getFieldValue = exports.getEventValue = exports.generateSlug = exports.classNames = void 0;
 const moment_1 = __importDefault(require("moment"));
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -41,7 +41,7 @@ function encodeHTMLEntities(str) {
 }
 exports.encodeHTMLEntities = encodeHTMLEntities;
 function numberFormat(number) {
-    return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
+    return new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 });
 }
 exports.numberFormat = numberFormat;
 function nFormatter(num, digits = 1) {
@@ -83,8 +83,20 @@ const getBase64 = (img, callback) => {
     reader.readAsDataURL(img);
 };
 exports.getBase64 = getBase64;
-const sleep = (seconds) => __awaiter(void 0, void 0, void 0, function* () {
+const sleep = (seconds = 5000) => __awaiter(void 0, void 0, void 0, function* () {
     return yield new Promise(r => setTimeout(r, seconds));
 });
 exports.sleep = sleep;
+const generateQueryUrl = (url, params) => {
+    if (params) {
+        let keys = Object.keys(params);
+        if (keys[0] && params[keys[0]]) {
+            url += `?${keys[0]}=${params[keys[0]]}`;
+        }
+        // console.log({ params, L: keys[0], p: params[keys[0]] })
+        keys.slice(1, keys.length).forEach((element) => url += `&${element}=${params[element]}`);
+    }
+    return url;
+};
+exports.generateQueryUrl = generateQueryUrl;
 //# sourceMappingURL=helpers.js.map

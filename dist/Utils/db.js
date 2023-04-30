@@ -15,37 +15,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql2_1 = __importDefault(require("mysql2"));
+// const bluebird = require('bluebird');
 class Db {
     constructor() {
         // this.client = new Client({
-        this.client = mysql2_1.default.createConnection({
-            user: process.env.DB_USER,
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            password: process.env.DB_PASSWORD,
-            port: process.env.DB_PORT,
-        });
+        // this.client.config. = true;
+        // this.client = this.connect();
+        // this.client =
         this.connect();
     }
     connect() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.connect();
+            const pool = mysql2_1.default.createPool({
+                user: process.env.DB_USER,
+                host: process.env.DB_HOST,
+                database: process.env.DB_NAME,
+                password: process.env.DB_PASSWORD,
+                port: process.env.DB_PORT,
+                waitForConnections: true,
+                connectionLimit: 10,
+                queueLimit: 0,
+                // Promise: bluebird,
+                // rowsAsArray: true
+            });
+            this.client = pool.promise();
+            // return await mysql.createConnection({
+            //     user: process.env.DB_USER,
+            //     host: process.env.DB_HOST,
+            //     database: process.env.DB_NAME,
+            //     password: process.env.DB_PASSWORD,
+            //     port: process.env.DB_PORT,
+            //     Promise: bluebird,
+            // });
+            // return await this.client.connect()
         });
     }
-    endConnection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.end();
-        });
-    }
+    // async endConnection() {
+    //     return await this.client.end()
+    // }
     query(query) {
         return __awaiter(this, void 0, void 0, function* () {
+            // console.log({ query })
             try {
-                const res = yield this.client.execute(query.text, query.values);
-                return res.rows;
+                // console.log({ x: await this.client });
+                const [rows, fields] = yield this.client.execute(query.text, query.values);
+                // const [rows, fields] = await client.query('SELECT * FROM `categories`', ['Morty', 14]);
+                return rows;
             }
             catch (e) {
                 this.handleError(e);
-                return false;
+                return [];
             }
         });
     }

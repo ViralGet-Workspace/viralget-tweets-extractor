@@ -45,6 +45,7 @@ class API {
     }
     get(url, requireAuth) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log({ url });
             try {
                 let response = requireAuth
                     ? yield this.instance.get(url, this.getConfig())
@@ -115,10 +116,6 @@ class API {
     ;
     handleResponse(response) {
         return response.data;
-        return {
-            status: response.status,
-            data: response.data,
-        };
     }
     handleError(error) {
         var _a, _b, _c, _d, _e, _f, _g;
