@@ -48,7 +48,7 @@ class API {
   }
 
   async get(url: string, requireAuth: boolean) {
-    console.log({ url });
+    // console.log({ url });
     try {
       let response = requireAuth
         ? await this.instance.get(url, this.getConfig())
@@ -110,6 +110,7 @@ class API {
   }
 
   handleError(error: any) {
+    console.log({ error })
     return {
       error: error.response?.data ?? 'An error occurred',
       message: error.response?.data?.message ?? 'An error occurred',

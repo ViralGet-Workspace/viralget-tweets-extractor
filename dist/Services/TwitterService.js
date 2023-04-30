@@ -18,30 +18,22 @@ const helpers_1 = require("../Utils/helpers");
 class TwitterService {
     constructor() {
         this.client = new twitter_api_sdk_1.Client(process.env.TWITTER_BEARER_TOKEN);
-        this.baseURL = 'https://api.twitter.com/2/';
+        this.baseURL = 'https://api.twitter.com/1.1/';
+        this.baseURLV2 = 'https://api.twitter.com/2/';
         const authorization = `Bearer ${process.env.TWITTER_BEARER_TOKEN}`;
         this.api = new api_1.default(authorization);
     }
     fetchFollowings(username) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `https://api.twitter.com/1.1/friends/list.json?cursor=-1&screen_name=${username}&skip_status=true&include_user_entities=false&count=200`;
+            const url = `${this.baseURL}friends/list.json?cursor=-1&screen_name=${username}&skip_status=true&include_user_entities=false&count=200`;
             // console.log({ url, searchQuery })
             return yield this.api.get(url, true);
         });
     }
     fetchTweets(keyword, geocode, searchQuery) {
         return __awaiter(this, void 0, void 0, function* () {
-            // let url = this.baseURL + `tweets/search/recent/?query=${keyword}`;
-            // let params: any = {
-            //     'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
-            //     'expansions': 'author_id,referenced_tweets.id',
-            //     'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
-            //     'media.fields': 'duration_ms,height,media_key,non_public_metrics,organic_metrics,preview_image_url,promoted_metrics,public_metrics,type,url,width',
-            //     'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
-            // }
-            // return await this.api.get(generateQueryUrl(url, params), true);
-            let baseUrl = this.baseURL + `tweets/search/recent/`;
-            let url = baseUrl;
+            const baseUrl = `${this.baseURL}search/tweets.json`;
+            let url = `?q=${keyword}&count=100&result_type=top`;
             if (geocode) {
                 url += `&geocode=${geocode}`;
             }
@@ -51,23 +43,15 @@ class TwitterService {
     }
     fetchUserTweets(username, searchQuery) {
         return __awaiter(this, void 0, void 0, function* () {
-            const baseUrl = `https://api.twitter.com/1.1/statuses/user_timeline.json`;
+            const baseUrl = `${this.baseURL}statuses/user_timeline.json`;
             let url = `?screen_name=${username}&count=100&include_rts=false`;
             url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
             return yield this.api.get(url, true);
         });
     }
-    // async fetchV2Tweets() {
-    //     const stream = this.client.tweets.sampleStream({
-    //         "tweet.fields": ["author_id"],
-    //     });
-    //     for await (const tweet of stream) {
-    //         console.log(tweet.data?.author_id);
-    //     }
-    // }
     fetchV2UserTweets(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = this.baseURL + `users/${userId}/tweets`;
+            let url = this.baseURLV2 + `users/${userId}/tweets`;
             let params = {
                 'max_results': 100,
                 // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
@@ -84,7 +68,7 @@ class TwitterService {
     }
     fetchV2User(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let url = this.baseURL + `users/${userId}`;
+            let url = this.baseURLV2 + `users/${userId}`;
             url += '?user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld';
             return yield this.api.get(url, true);
         });

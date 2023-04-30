@@ -5,7 +5,8 @@ import TwitterExtractorMainController from './controllers/TwitterExtractorMainCo
 import Db from './Utils/db.js';
 import API from './Utils/api.js';
 import TwitterService from './Services/TwitterService.js';
-import TwitterInfluencerMetricsExtractor from './controllers/TwitterInfluencerMetricsExtractor.js';
+import TwitterInfluencerMetricsExtractor from './Helpers/TwitterInfluencerMetricsExtractor.js';
+import CategoryRepository from './models/CategoryRepository.js';
 
 sourceMapSupport.install();
 dotenv.config()
@@ -20,54 +21,55 @@ const minFollowersCount = 1000;
 const twitterExtractor = new TwitterExtractorMainController();
 
 
-// async function fetchByKeyword(keyword, category) {
-//     await twitterExtractor.handleFetchInfluencers(keyword, category, geocode, minFollowersCount);
-// }
+async function fetchByKeyword(keyword, category) {
+    await twitterExtractor.handleFetchInfluencers(keyword, category, geocode, minFollowersCount);
+}
 
-// async function fetchByCategory(categoryId) {
-//     const keywordCategory = await twitterExtractor.findKeywordCategoryByID(categoryId);
+async function fetchByCategory(categoryId) {
+    const categoryRepository = (new CategoryRepository)
+    const keywordCategory = await categoryRepository.findKeywordCategoryByID(categoryId);
 
-//     console.log({ keywordCategory })
+    console.log({ keywordCategory })
 
-//     const keywords = keywordCategory[0]?.keywords.split(', ');
+    if (keywordCategory.length) {
+        const keywords = keywordCategory[0]?.keywords.split(', ');
 
-//     let nextKeyword = keywords[Math.floor(Math.random() * keywords.length)];
+        let nextKeyword = keywords[Math.floor(Math.random() * keywords?.length)];
 
-//     if (keywordCategory) {
-//         await fetchByKeyword(nextKeyword, keywordCategory[0]);
-//     }
-// }
+        await fetchByKeyword(nextKeyword, keywordCategory[0]);
+    }
+}
 
-// async function fetchByRandomCategory() {
-//     let min = 1;
-//     let max = 15;
-//     let categoryId = Math.floor(Math.random() * (max - min + 1)) - min;
+async function fetchByRandomCategory() {
+    let min = 1;
+    let max = 15;
+    let categoryId = Math.floor(Math.random() * (max - min + 1)) - min;
 
 
-//     fetchByCategory(categoryId);
+    fetchByCategory(categoryId);
 
-// }
-
-// export async function runCode() {
-//     await fetchByRandomCategory();
-// }
+}
 
 export async function runCode() {
-    let twitterService = (new TwitterService);
-    // let data = await twitterService.fetchTweets('finance');
-
-    let userId = '1647359670619881473';
-    let user = await twitterService.fetchV2User(userId);
-    let userTweets = await twitterService.fetchV2UserTweets(userId);
-
-    // console.log(user)
-    // console.log({ user: user.toString(), userTweets: userTweets.toString() });
-
-    let metricsExtractor = new TwitterInfluencerMetricsExtractor(user, userTweets);
-
-    metricsExtractor.extract();
-    // console.log({ data })
+    await fetchByRandomCategory();
 }
+
+// export async function runCode() {
+//     let twitterService = (new TwitterService);
+//     // let data = await twitterService.fetchTweets('finance');
+
+//     let userId = '28332478';
+//     let user = await twitterService.fetchV2User(userId);
+//     let userTweets = await twitterService.fetchV2UserTweets(userId);
+
+//     // console.log(user)
+//     // console.log({ user: user.toString(), userTweets: userTweets.toString() });
+
+//     let metricsExtractor = new TwitterInfluencerMetricsExtractor(user, userTweets);
+
+//     metricsExtractor.extract();
+//     // console.log({ data })
+// }
 
 runCode();
 

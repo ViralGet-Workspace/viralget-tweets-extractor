@@ -12,22 +12,65 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_1 = __importDefault(require("../Utils/db"));
-class MetricsRepository {
+const BaseRepository_1 = __importDefault(require("./BaseRepository"));
+class MetricsRepository extends BaseRepository_1.default {
     constructor() {
-        this.db = new db_1.default;
+        super();
     }
-    store(tweetUserId, categoryId) {
+    store(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { followers_count, following_count, tweets_count, engagement_rate, average_impressions, total_interactions, reach, reachablility, quality_audience_score, brand_safety_level, impressions_count, authentic_engagement, total_tweets, total_likes, total_replies, total_retweets, media_value, average_cpe, average_cpm, best_performing_tweets, most_used_hashtags } = data;
+                console.log({
+                    followers_count,
+                    following_count,
+                    tweets_count,
+                    engagement_rate,
+                    average_impressions,
+                    total_interactions,
+                    reach,
+                    reachablility,
+                    quality_audience_score,
+                    brand_safety_level,
+                    impressions_count,
+                    authentic_engagement,
+                    total_tweets,
+                    total_likes,
+                    total_replies,
+                    total_retweets,
+                    media_value,
+                    average_cpe,
+                    average_cpm,
+                    best_performing_tweets,
+                    most_used_hashtags
+                });
                 const query = {
-                    text: `INSERT IGNORE INTO influencer_categories SET influencer_id = ?, platform_id = ?, category_id = ?`,
-                    values: [tweetUserId, 1, categoryId],
+                    text: `INSERT IGNORE INTO influencer_metrics SET influencer_id = ?,  platform_id = ?,  influencer_id = ?, platform_id = ?, engagement_rate = ?, average_impressions = ?, impressions = ?, interactions = ?, reach = ?, reachability = ?, quality_audience = ?, authentic_engagement = ?, brand_safety_level = ?, total_tweets = ?, total_likes = ?, total_replies = ?, total_retweets = ?, media_value = ?, average_cpe = ?, average_cpm = ?, global_rank = ?, category_rank = ?, country_rank = ?, most_used_hashtags = ?`,
+                    values: [followers_count,
+                        following_count,
+                        tweets_count,
+                        engagement_rate,
+                        average_impressions,
+                        total_interactions,
+                        reach,
+                        reachablility,
+                        quality_audience_score,
+                        brand_safety_level,
+                        impressions_count,
+                        authentic_engagement,
+                        total_tweets,
+                        total_likes,
+                        total_replies,
+                        total_retweets,
+                        media_value,
+                        average_cpe,
+                        average_cpm,
+                        best_performing_tweets,
+                        most_used_hashtags],
                 };
                 yield this.db.query(query);
             }
             catch (e) {
-                console.log({ e });
                 return false;
             }
         });

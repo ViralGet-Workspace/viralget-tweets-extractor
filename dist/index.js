@@ -43,7 +43,8 @@ const TwitterExtractorMainController_js_1 = __importDefault(require("./controlle
 const db_js_1 = __importDefault(require("./Utils/db.js"));
 const api_js_1 = __importDefault(require("./Utils/api.js"));
 const TwitterService_js_1 = __importDefault(require("./Services/TwitterService.js"));
-const TwitterInfluencerMetricsExtractor_js_1 = __importDefault(require("./controllers/TwitterInfluencerMetricsExtractor.js"));
+const TwitterInfluencerMetricsExtractor_js_1 = __importDefault(require("./Helpers/TwitterInfluencerMetricsExtractor.js"));
+const CategoryRepository_js_1 = __importDefault(require("./models/CategoryRepository.js"));
 source_map_support_1.default.install();
 dotenv.config();
 const port = 8002;
@@ -52,42 +53,50 @@ const geocode = '9.0066472,3.3689801,1000km';
 // const geocode = '37.6000,-95.6650,1000km';
 const minFollowersCount = 1000;
 const twitterExtractor = new TwitterExtractorMainController_js_1.default();
-// async function fetchByKeyword(keyword, category) {
-//     await twitterExtractor.handleFetchInfluencers(keyword, category, geocode, minFollowersCount);
-// }
-// async function fetchByCategory(categoryId) {
-//     const keywordCategory = await twitterExtractor.findKeywordCategoryByID(categoryId);
-//     console.log({ keywordCategory })
-//     const keywords = keywordCategory[0]?.keywords.split(', ');
-//     let nextKeyword = keywords[Math.floor(Math.random() * keywords.length)];
-//     if (keywordCategory) {
-//         await fetchByKeyword(nextKeyword, keywordCategory[0]);
-//     }
-// }
-// async function fetchByRandomCategory() {
-//     let min = 1;
-//     let max = 15;
-//     let categoryId = Math.floor(Math.random() * (max - min + 1)) - min;
-//     fetchByCategory(categoryId);
-// }
-// export async function runCode() {
-//     await fetchByRandomCategory();
-// }
+function fetchByKeyword(keyword, category) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield twitterExtractor.handleFetchInfluencers(keyword, category, geocode, minFollowersCount);
+    });
+}
+function fetchByCategory(categoryId) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const categoryRepository = (new CategoryRepository_js_1.default);
+        const keywordCategory = yield categoryRepository.findKeywordCategoryByID(categoryId);
+        console.log({ keywordCategory });
+        if (keywordCategory.length) {
+            const keywords = (_a = keywordCategory[0]) === null || _a === void 0 ? void 0 : _a.keywords.split(', ');
+            let nextKeyword = keywords[Math.floor(Math.random() * (keywords === null || keywords === void 0 ? void 0 : keywords.length))];
+            yield fetchByKeyword(nextKeyword, keywordCategory[0]);
+        }
+    });
+}
+function fetchByRandomCategory() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let min = 1;
+        let max = 15;
+        let categoryId = Math.floor(Math.random() * (max - min + 1)) - min;
+        fetchByCategory(categoryId);
+    });
+}
 function runCode() {
     return __awaiter(this, void 0, void 0, function* () {
-        let twitterService = (new TwitterService_js_1.default);
-        // let data = await twitterService.fetchTweets('finance');
-        let userId = '1647359670619881473';
-        let user = yield twitterService.fetchV2User(userId);
-        let userTweets = yield twitterService.fetchV2UserTweets(userId);
-        // console.log(user)
-        // console.log({ user: user.toString(), userTweets: userTweets.toString() });
-        let metricsExtractor = new TwitterInfluencerMetricsExtractor_js_1.default(user, userTweets);
-        metricsExtractor.extract();
-        // console.log({ data })
+        yield fetchByRandomCategory();
     });
 }
 exports.runCode = runCode;
+// export async function runCode() {
+//     let twitterService = (new TwitterService);
+//     // let data = await twitterService.fetchTweets('finance');
+//     let userId = '28332478';
+//     let user = await twitterService.fetchV2User(userId);
+//     let userTweets = await twitterService.fetchV2UserTweets(userId);
+//     // console.log(user)
+//     // console.log({ user: user.toString(), userTweets: userTweets.toString() });
+//     let metricsExtractor = new TwitterInfluencerMetricsExtractor(user, userTweets);
+//     metricsExtractor.extract();
+//     // console.log({ data })
+// }
 runCode();
 // app.get('/', async (req, res) => {
 //     const twitterExtractor = new TwitterExtractorMainController();

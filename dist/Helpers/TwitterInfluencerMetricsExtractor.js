@@ -8,16 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const MetricsRepository_1 = __importDefault(require("../models/MetricsRepository"));
 class TwitterInfluencerMetricsExtractor {
     constructor(user, tweets) {
         this.user = user.data;
         this.tweets = tweets;
-        this.metricsRepository = new MetricsRepository_1.default;
     }
     extract() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -28,23 +23,23 @@ class TwitterInfluencerMetricsExtractor {
                 engagement_rate: this.getEngagementRate().toFixed(2),
                 average_impressions: this.getAverageImpressions().toFixed(2),
                 total_interactions: this.getTotalInteractions(),
-                reach: this.getReach(),
-                reachablility: this.getReachability(),
+                reach: this.getReach().toFixed(0),
+                reachablility: this.getReachability().toFixed(0),
                 quality_audience_score: this.getQualityAudienceScore(),
                 brand_safety_level: this.getBrandSafetyLevel().toFixed(0),
                 impressions_count: this.getTotalImpressionCount(),
                 authentic_engagement: this.getAuthenticEngagements().toFixed(0),
-                total_tweeets: this.getTotalFetchedTweets(),
+                total_tweets: this.getTotalFetchedTweets(),
                 total_likes: this.getTotalLikesCount(),
                 total_replies: this.getTotalReplyCount(),
                 total_retweets: this.getTotalRetweetCount(),
                 media_value: this.getMediaValue().toFixed(0),
                 average_cpe: this.getAverageCPE().toFixed(2),
-                average_cpm: this.getAverageCPM().toFixed(4),
+                average_cpm: this.getAverageCPM().toFixed(5),
                 best_performing_tweets: this.getBestPerformingTweets(),
                 most_used_hashtags: this.getMostUsedHashtags(),
             };
-            console.log({ data });
+            console.log({ data: Object.keys(data) });
         });
     }
     getTotalFetchedTweets() {
@@ -141,8 +136,8 @@ class TwitterInfluencerMetricsExtractor {
     getBrandSafetyLevel() {
         var _a, _b;
         let sensitive_tweets = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.filter((tweet) => tweet.possibly_sensitive);
-        console.log({ sensitive_tweets: this.tweets });
-        return (sensitive_tweets.length / this.getTotalFetchedTweets()) * 100;
+        // console.log({ sensitive_tweets: this.tweets });
+        return ((sensitive_tweets === null || sensitive_tweets === void 0 ? void 0 : sensitive_tweets.length) / this.getTotalFetchedTweets()) * 100;
     }
     getTotalInteractions() {
         return this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount() + this.getTotalMediaViewsCount() + this.getTotalPollsCount();
@@ -151,7 +146,7 @@ class TwitterInfluencerMetricsExtractor {
         return this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount();
     }
     getAuthenticEngagements() {
-        return ((this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount()) / this.getTotalFetchedTweets()) * 100;
+        return ((this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount()) / this.getTotalFetchedTweets()) / 100;
     }
     // TODO
     getQualityAudience() {
@@ -179,20 +174,23 @@ class TwitterInfluencerMetricsExtractor {
         return this.getReach() * 1000;
     }
     getTweetsHashtags() {
-        var _a;
+        var _a, _b;
         const hashtags = {};
-        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data.forEach((tweet) => {
+        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
             var _a, _b;
-            (_b = (_a = tweet.entity) === null || _a === void 0 ? void 0 : _a.hashtags) === null || _b === void 0 ? void 0 : _b.forEach((hashtag) => {
-                if (hashtags[hashtag]) {
-                    hashtags[hashtag] = hashtags.hashtag + 1;
-                }
-                else {
-                    hashtags[hashtag] = 1;
+            (_b = (_a = tweet.entities) === null || _a === void 0 ? void 0 : _a.hashtags) === null || _b === void 0 ? void 0 : _b.forEach((hashtag) => {
+                let tag = hashtag === null || hashtag === void 0 ? void 0 : hashtag.tag;
+                if (tag) {
+                    if (hashtags[tag]) {
+                        hashtags[tag] = hashtags.tag + 1;
+                    }
+                    else {
+                        hashtags[tag] = 1;
+                    }
                 }
             });
         });
-        return Object.values(hashtags).sort((a, b) => a[1] - b[1]);
+        return Object.keys(hashtags).sort((a, b) => hashtags[a] - hashtags[b]);
     }
     getBestPerformingTweets() {
         let tweets = this.tweets.data.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });

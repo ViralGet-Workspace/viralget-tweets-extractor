@@ -5,12 +5,10 @@ export default class TwitterInfluencerMetricsExtractor {
 
     private user: any;
     private tweets: any;
-    private metricsRepository: any;
 
     constructor(user: any, tweets: any) {
         this.user = user.data;
         this.tweets = tweets;
-        this.metricsRepository = new MetricsRepository;
     }
 
 
@@ -22,25 +20,25 @@ export default class TwitterInfluencerMetricsExtractor {
             engagement_rate: this.getEngagementRate().toFixed(2),
             average_impressions: this.getAverageImpressions().toFixed(2),
             total_interactions: this.getTotalInteractions(),
-            reach: this.getReach(),
-            reachablility: this.getReachability()
+            reach: this.getReach().toFixed(0),
+            reachablility: this.getReachability().toFixed(0),
             quality_audience_score: this.getQualityAudienceScore(),
             brand_safety_level: this.getBrandSafetyLevel().toFixed(0),
             impressions_count: this.getTotalImpressionCount(),
             authentic_engagement: this.getAuthenticEngagements().toFixed(0),
-            total_tweeets: this.getTotalFetchedTweets(),
+            total_tweets: this.getTotalFetchedTweets(),
             total_likes: this.getTotalLikesCount(),
             total_replies: this.getTotalReplyCount(),
             total_retweets: this.getTotalRetweetCount(),
             media_value: this.getMediaValue().toFixed(0),
             average_cpe: this.getAverageCPE().toFixed(2),
-            average_cpm: this.getAverageCPM().toFixed(4),
+            average_cpm: this.getAverageCPM().toFixed(5),
             best_performing_tweets: this.getBestPerformingTweets(),
             most_used_hashtags: this.getMostUsedHashtags(),
 
         }
 
-        console.log({ data })
+        console.log({ data: Object.keys(data) })
     }
 
 
@@ -153,8 +151,8 @@ export default class TwitterInfluencerMetricsExtractor {
     getBrandSafetyLevel() {
         let sensitive_tweets = this.tweets?.data?.filter((tweet: any) => tweet.possibly_sensitive);
 
-        console.log({ sensitive_tweets: this.tweets });
-        return (sensitive_tweets.length / this.getTotalFetchedTweets()) * 100;
+        // console.log({ sensitive_tweets: this.tweets });
+        return (sensitive_tweets?.length / this.getTotalFetchedTweets()) * 100;
     }
 
     getTotalInteractions() {
@@ -166,7 +164,7 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     getAuthenticEngagements() {
-        return ((this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount()) / this.getTotalFetchedTweets()) * 100;
+        return ((this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount()) / this.getTotalFetchedTweets()) / 100;
     }
 
     // TODO
@@ -208,17 +206,21 @@ export default class TwitterInfluencerMetricsExtractor {
     getTweetsHashtags() {
         const hashtags: any = {};
 
-        this.tweets?.data.forEach((tweet: any) => {
-            tweet.entity?.hashtags?.forEach((hashtag: string) => {
-                if (hashtags[hashtag]) {
-                    hashtags[hashtag] = hashtags.hashtag + 1;
-                } else {
-                    hashtags[hashtag] = 1;
+        this.tweets?.data?.forEach((tweet: any) => {
+            tweet.entities?.hashtags?.forEach((hashtag: any) => {
+                let tag = hashtag?.tag;
+
+                if (tag) {
+                    if (hashtags[tag]) {
+                        hashtags[tag] = hashtags.tag + 1;
+                    } else {
+                        hashtags[tag] = 1;
+                    }
                 }
             });
         });
 
-        return Object.values(hashtags).sort((a: any, b: any) => a[1] - b[1]);
+        return Object.keys(hashtags).sort((a: any, b: any) => hashtags[a] - hashtags[b]);
     }
 
     getBestPerformingTweets() {
