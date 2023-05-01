@@ -104,13 +104,13 @@ class API {
   };
 
   handleResponse(response: any) {
-
-
     return response.data;
   }
 
   handleError(error: any) {
-    console.log({ error })
+    // console.log({ error })
+    return false;
+
     return {
       error: error.response?.data ?? 'An error occurred',
       message: error.response?.data?.message ?? 'An error occurred',

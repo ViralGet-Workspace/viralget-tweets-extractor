@@ -49,7 +49,7 @@ source_map_support_1.default.install();
 dotenv.config();
 const port = 8002;
 const app = (0, express_1.default)();
-const geocode = '9.0066472,3.3689801,1000km';
+const geocode = '9.0066472,3.3689801';
 // const geocode = '37.6000,-95.6650,1000km';
 const minFollowersCount = 1000;
 const twitterExtractor = new TwitterExtractorMainController_js_1.default();
@@ -63,7 +63,7 @@ function fetchByCategory(categoryId) {
     return __awaiter(this, void 0, void 0, function* () {
         const categoryRepository = (new CategoryRepository_js_1.default);
         const keywordCategory = yield categoryRepository.findKeywordCategoryByID(categoryId);
-        console.log({ keywordCategory });
+        // console.log({ keywordCategory })
         if (keywordCategory.length) {
             const keywords = (_a = keywordCategory[0]) === null || _a === void 0 ? void 0 : _a.keywords.split(', ');
             let nextKeyword = keywords[Math.floor(Math.random() * (keywords === null || keywords === void 0 ? void 0 : keywords.length))];
@@ -81,7 +81,8 @@ function fetchByRandomCategory() {
 }
 function runCode() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield fetchByRandomCategory();
+        // await fetchByRandomCategory();
+        fetchByCategory(7);
     });
 }
 exports.runCode = runCode;

@@ -59,6 +59,7 @@ class Db {
             // console.log({ x: await this.client });
             const [rows, fields] = await this.client.execute(query.text, query.values);
 
+            // console.log({ rows })
 
             // const [rows, fields] = await client.query('SELECT * FROM `categories`', ['Morty', 14]);
 

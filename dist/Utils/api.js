@@ -119,7 +119,8 @@ class API {
     }
     handleError(error) {
         var _a, _b, _c, _d, _e, _f, _g;
-        console.log({ error });
+        // console.log({ error })
+        return false;
         return {
             error: (_b = (_a = error.response) === null || _a === void 0 ? void 0 : _a.data) !== null && _b !== void 0 ? _b : 'An error occurred',
             message: (_e = (_d = (_c = error.response) === null || _c === void 0 ? void 0 : _c.data) === null || _d === void 0 ? void 0 : _d.message) !== null && _e !== void 0 ? _e : 'An error occurred',

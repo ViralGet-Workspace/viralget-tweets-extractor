@@ -14,7 +14,7 @@ dotenv.config()
 const port = 8002;
 const app = express();
 
-const geocode = '9.0066472,3.3689801,1000km';
+const geocode = '9.0066472,3.3689801';
 // const geocode = '37.6000,-95.6650,1000km';
 
 const minFollowersCount = 1000;
@@ -29,7 +29,7 @@ async function fetchByCategory(categoryId) {
     const categoryRepository = (new CategoryRepository)
     const keywordCategory = await categoryRepository.findKeywordCategoryByID(categoryId);
 
-    console.log({ keywordCategory })
+    // console.log({ keywordCategory })
 
     if (keywordCategory.length) {
         const keywords = keywordCategory[0]?.keywords.split(', ');
@@ -51,7 +51,8 @@ async function fetchByRandomCategory() {
 }
 
 export async function runCode() {
-    await fetchByRandomCategory();
+    // await fetchByRandomCategory();
+    fetchByCategory(7);
 }
 
 // export async function runCode() {

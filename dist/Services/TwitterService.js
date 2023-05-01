@@ -35,9 +35,10 @@ class TwitterService {
             const baseUrl = `${this.baseURL}search/tweets.json`;
             let url = `?q=${keyword}&count=100&result_type=top`;
             if (geocode) {
-                url += `&geocode=${geocode}`;
+                url += `&geocode=${geocode},1000km`;
             }
             url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
+            // console.log({ url })
             return yield this.api.get(url, true);
         });
     }

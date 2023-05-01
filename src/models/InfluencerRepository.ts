@@ -7,12 +7,11 @@ export default class InfluencerRepository extends BaseRepository {
         super();
     }
 
-
-    async find(id: string) {
+    async findById(id: string) {
 
         try {
             const query = {
-                text: `SELECT * from twitter_influencers WHERE twitter_id = ?`,
+                text: `SELECT * from twitter_influencers WHERE id = ?`,
                 values: [id],
             }
 
@@ -27,6 +26,24 @@ export default class InfluencerRepository extends BaseRepository {
         }
     }
 
+    async findByTwitterId(twitter_id: string) {
+
+        try {
+            const query = {
+                text: `SELECT * from twitter_influencers WHERE twitter_id = ?`,
+                values: [twitter_id],
+            }
+
+            const result = await this.db.query(query);
+
+            return result[0];
+
+        } catch (e) {
+            console.log({ e })
+
+            return false;
+        }
+    }
 
     async store(tweetUser: any, category: string, geocode: string, searchLocation: string | null) {
 
@@ -50,11 +67,9 @@ export default class InfluencerRepository extends BaseRepository {
                 }
                 const user = await this.db.query(query);
 
-                // console.log({user})
-                await this.storeTweetUserCategory(tweetUser.id, category);
             }
 
-            return await this.find(tweetUser.id);
+            return await this.findByTwitterId(tweetUser.id);
 
         } catch (e) {
             return false;
@@ -63,34 +78,33 @@ export default class InfluencerRepository extends BaseRepository {
 
     }
 
-    async storeTweetUserCategory(tweetUserId: string, categoryId: string) {
+
+    async update(userId: number, fields: string[], values: string[]) {
+
+        let _fields = '';
+
+        fields.forEach(field => {
+            _fields += `${field} = ? `;
+        });
+
+        // console.log({ _fields, values })
 
         try {
-            // const userExists = await this.checkTweetUser(tweetUser.id);
-
-            // console.log({ tweetUser, category })
-            // if (userExists) {
-            //     // Update
-            //     console.log('User exists', { username: tweetUser.screen_name })
-
-            // } else {
-            //     console.log('User does not exist', { username: tweetUser.screen_name })
-
-
             const query = {
-                text: `INSERT IGNORE INTO influencer_categories SET influencer_id = ?, platform_id = ?, category_id = ?`,
-                values: [tweetUserId, 1, categoryId],
+                text: `UPDATE twitter_influencers SET ${_fields} WHERE id = ?`,
+                values: [...values, userId],
             }
 
-            await this.db.query(query);
+            const result = await this.db.query(query);
 
-            // }
+            return result[0];
+
         } catch (e) {
             console.log({ e })
+
             return false;
         }
-
-
     }
+
 
 }

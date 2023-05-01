@@ -35,11 +35,12 @@ export default class TwitterService {
         let url = `?q=${keyword}&count=100&result_type=top`;
 
         if (geocode) {
-            url += `&geocode=${geocode}`;
+            url += `&geocode=${geocode},1000km`;
         }
 
         url = searchQuery ? baseUrl + searchQuery : baseUrl + url;
 
+        // console.log({ url })
         return await this.api.get(url, true);
     }
 

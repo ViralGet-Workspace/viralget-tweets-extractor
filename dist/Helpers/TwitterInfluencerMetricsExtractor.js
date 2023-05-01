@@ -11,7 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 class TwitterInfluencerMetricsExtractor {
     constructor(user, tweets) {
-        this.user = user.data;
+        // this.user = user.data;
+        this.user = user;
         this.tweets = tweets;
     }
     extract() {
@@ -39,7 +40,8 @@ class TwitterInfluencerMetricsExtractor {
                 best_performing_tweets: this.getBestPerformingTweets(),
                 most_used_hashtags: this.getMostUsedHashtags(),
             };
-            console.log({ data: Object.keys(data) });
+            // console.log({ data: Object.keys(data) })
+            return data;
         });
     }
     getTotalFetchedTweets() {
@@ -48,15 +50,18 @@ class TwitterInfluencerMetricsExtractor {
     }
     getFollowersCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.followers_count;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.followers_count) !== null && _b !== void 0 ? _b : 0;
+        // return this.user?.public_metrics?.followers_count;
     }
     getFollowingCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.following_count;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.friends_count) !== null && _b !== void 0 ? _b : 0;
+        // return this.user?.public_metrics?.following_count;
     }
     getTweetsCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.tweet_count;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.statuses_count) !== null && _b !== void 0 ? _b : 0;
+        // return this.user?.public_metrics?.tweet_count;
     }
     getTotalLikesCount() {
         var _a, _b;
@@ -193,8 +198,9 @@ class TwitterInfluencerMetricsExtractor {
         return Object.keys(hashtags).sort((a, b) => hashtags[a] - hashtags[b]);
     }
     getBestPerformingTweets() {
-        let tweets = this.tweets.data.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });
-        return tweets.slice(0, 5);
+        var _a;
+        let tweets = (_a = this.tweets.data) === null || _a === void 0 ? void 0 : _a.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });
+        return tweets === null || tweets === void 0 ? void 0 : tweets.slice(0, 5);
     }
     getMediaValue() {
         return (this.getAverageImpressions() * 360) / 1000;

@@ -36,28 +36,27 @@ export default class TwitterExtractorMainController {
         this.categoryRepository = new CategoryRepository;
     }
 
-
-
-    async handleFetchInfluencers(keyword: string, category: any, geocode: string = '9.0820,8.6753,1000000km', minFollowersCount: number = 1000, nextResultsUrl?: string) {
+    async handleFetchInfluencers(keyword: string, category: any, geocode: string = '9.0820,8.6753', minFollowersCount: number = 1000, nextResultsUrl?: string) {
 
         console.log('Keyword: ', keyword, 'runcount:', this.runCount);
 
         const response = await this.twitterService.fetchTweets(keyword, geocode, nextResultsUrl,);
 
-        console.log({ response });
+        // console.log({ response });
         // Store in DB after filter
         if (!response.statuses || !response.statuses.length) {
             console.log('No tweets found. Restart!!!')
 
-            runCode();
+            await sleep()
+            await runCode();
             return false;
         }
 
-        if (response.statuses.length == 0) {
-            console.log('Terminated!!!')
+        // if (response.statuses.length == 0) {
+        //     console.log('Terminated!!!')
 
-            return false;
-        }
+        //     return false;
+        // }
 
         // console.log({response: response.statuses})
         for (let i = 0; i <= response.statuses.length; i++) {
@@ -68,7 +67,7 @@ export default class TwitterExtractorMainController {
 
                 const user = tweet.user;
 
-                this.handleProcessInfluencerCheck(user, minFollowersCount, category, geocode);
+                await this.handleProcessInfluencerCheck(user, minFollowersCount, category, geocode);
                 // sleep(200000);
             }
 
@@ -78,7 +77,7 @@ export default class TwitterExtractorMainController {
 
         if (response.search_metadata?.next_results) {
             setTimeout(() => {
-                console.log('Next batch ======>>>> ', response.search_metadata?.next_result)
+                console.log('Continue to next page ======>>>> ', response.search_metadata?.next_result)
                 // this.handleFetchInfluencers(keyword, category, geocode, response.search_metadata.next_results);
                 this.runCount++;
                 this.handleFetchInfluencers(keyword, category, geocode, minFollowersCount, response.search_metadata.next_results);
@@ -89,21 +88,34 @@ export default class TwitterExtractorMainController {
     }
 
 
-    async processUserTweets(user: any, userTweets: any) {
-        let metricsExtractor = new TwitterInfluencerMetricsExtractor(user, userTweets);
+    async processinfluencerTweets(influencerId: number, influencer: any, influencerTweets: any) {
+        // console.log('SEE ME HEREEEE', { influencer, influencerTweets })
 
-        let extractedData = metricsExtractor.extract();
+        try {
+            if (!influencer || !influencerTweets) {
+                throw new Error('Cannot process user tweets');
+            }
 
-        await this.metricsRepository.store(extractedData);
+            let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets);
+
+            let extractedData = await metricsExtractor.extract();
+
+            await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
+
+            await this.userRepository.update(influencerId, ['tweets_count'], [extractedData?.tweets_count]);
+
+        } catch (e) {
+            console.log({ e })
+        }
     }
 
-    async checkUserQualifiesAsInfluencer(userTweets: any, category: any) {
+    async checkUserQualifiesAsInfluencer(influencerTweets: any, category: any) {
         const keywords = category.keywords.split(', ');
 
         const qualifiedTweets: string[] = [];
 
-        if (userTweets.data?.length > 0) {
-            userTweets.data.forEach((tweet: any) => {
+        if (influencerTweets.data?.length > 0) {
+            influencerTweets.data.forEach((tweet: any) => {
                 keywords.forEach((keyword: string) => {
                     // console.log({ keyword, tweet })
                     if (tweet.text.includes(keyword) || tweet.text.includes(keyword.replace(' ', ''))) {
@@ -112,14 +124,14 @@ export default class TwitterExtractorMainController {
                 });
             });
         }
-        return ((qualifiedTweets.length / userTweets.length) * 100) > 30;
+        return ((qualifiedTweets.length / influencerTweets.length) * 100) > 30;
     }
 
     async handleProcessInfluencerCheck(user: any, minFollowersCount: number, category: any, geocode: string, fetchFriends = true) {
         if (user.followers_count >= minFollowersCount) {
             // Fetch user tweets
-            const userTweets = await this.twitterService.fetchV2UserTweets(user.id);
-            // console.log({ userTweets })
+            const influencerTweets = await this.twitterService.fetchV2UserTweets(user.id);
+            // console.log({ influencerTweets })
 
             const keywords = category.keywords.split(', ');
 
@@ -136,20 +148,19 @@ export default class TwitterExtractorMainController {
                 const insertedUser = await this.userRepository.store(user, category.id, geocode, searchLocation);
 
                 if (insertedUser) {
-                    await this.categoryRepository.store(insertedUser, category.id)
+                    await this.categoryRepository.store(insertedUser.id, category.id)
+
+                    await this.processinfluencerTweets(insertedUser.id, user, influencerTweets);
                 }
 
                 if (fetchFriends) {
                     await this.fetchInfluencerFriends(user, minFollowersCount, category, geocode);
                 }
 
-                await sleep()
-
-                await this.processUserTweets(user, userTweets);
 
             } else {
 
-                const userQualifiesAsInfluencer = await this.checkUserQualifiesAsInfluencer(userTweets, category);
+                const userQualifiesAsInfluencer = await this.checkUserQualifiesAsInfluencer(influencerTweets, category);
 
                 if (userQualifiesAsInfluencer) {
 
@@ -157,15 +168,14 @@ export default class TwitterExtractorMainController {
 
                     if (insertedUser) {
                         await this.categoryRepository.store(insertedUser.id, category.id)
+
+                        await this.processinfluencerTweets(insertedUser.id, user, influencerTweets);
                     }
 
                     if (fetchFriends) {
                         await this.fetchInfluencerFriends(user, minFollowersCount, category, geocode);
                     }
 
-                    await sleep();
-
-                    await this.processUserTweets(user, userTweets);
                 }
 
             }
@@ -184,20 +194,20 @@ export default class TwitterExtractorMainController {
 
         if (friends.users?.length > 0) {
             friends.users.forEach(async (friend: any) => {
-                sleep();
+                await sleep();
                 await this.handleProcessInfluencerCheck(friend, minFollowersCount, category, geocode, false);
             });
 
         }
     }
 
-    // async handleFetchUserTweets(username: string) {
+    // async handleFetchinfluencerTweets(username: string) {
 
-    //     const userTweets = await this.twitterService.fetchUserTweets(
+    //     const influencerTweets = await this.twitterService.fetchinfluencerTweets(
     //         username
     //     );
 
-    //     return userTweets;
+    //     return influencerTweets;
     // }
 
     getRandomKeyword() {

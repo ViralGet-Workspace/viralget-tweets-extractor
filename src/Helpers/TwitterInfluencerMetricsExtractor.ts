@@ -7,7 +7,8 @@ export default class TwitterInfluencerMetricsExtractor {
     private tweets: any;
 
     constructor(user: any, tweets: any) {
-        this.user = user.data;
+        // this.user = user.data;
+        this.user = user;
         this.tweets = tweets;
     }
 
@@ -37,8 +38,9 @@ export default class TwitterInfluencerMetricsExtractor {
             most_used_hashtags: this.getMostUsedHashtags(),
 
         }
+        // console.log({ data: Object.keys(data) })
 
-        console.log({ data: Object.keys(data) })
+        return data;
     }
 
 
@@ -47,15 +49,18 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     getFollowersCount() {
-        return this.user?.public_metrics?.followers_count;
+        return this.user?.followers_count ?? 0;
+        // return this.user?.public_metrics?.followers_count;
     }
 
     getFollowingCount() {
-        return this.user?.public_metrics?.following_count;
+        return this.user?.friends_count ?? 0;
+        // return this.user?.public_metrics?.following_count;
     }
 
     getTweetsCount() {
-        return this.user?.public_metrics?.tweet_count;
+        return this.user?.statuses_count ?? 0;
+        // return this.user?.public_metrics?.tweet_count;
     }
 
     getTotalLikesCount() {
@@ -224,9 +229,9 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     getBestPerformingTweets() {
-        let tweets = this.tweets.data.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
+        let tweets = this.tweets.data?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
 
-        return tweets.slice(0, 5);
+        return tweets?.slice(0, 5);
     }
 
     getMediaValue() {
