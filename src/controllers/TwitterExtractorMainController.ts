@@ -3,10 +3,10 @@ import Db from "../Utils/db";
 import { sleep } from "../Utils/helpers";
 import TwitterService from "../Services/TwitterService";
 import TwitterInfluencerMetricsExtractor from "../Helpers/TwitterInfluencerMetricsExtractor";
-import UserRepository from "../models/InfluencerRepository";
 import TweetRepository from "../models/TweetRepository";
 import MetricsRepository from "../models/MetricsRepository";
 import CategoryRepository from "../models/CategoryRepository";
+import InfluencerRepository from "../models/InfluencerRepository";
 
 const searchLocation = 'Nigeria';
 
@@ -19,7 +19,7 @@ export default class TwitterExtractorMainController {
 
     private twitterService;
     // private db;
-    private userRepository;
+    private influencerRepository;
     private metricsRepository;
     private tweetRepository;
     private categoryRepository;
@@ -30,7 +30,7 @@ export default class TwitterExtractorMainController {
 
         // this.db = new Db;
 
-        this.userRepository = new UserRepository;
+        this.influencerRepository = new InfluencerRepository;
         this.tweetRepository = new TweetRepository;
         this.metricsRepository = new MetricsRepository;
         this.categoryRepository = new CategoryRepository;
@@ -93,8 +93,10 @@ export default class TwitterExtractorMainController {
 
         try {
             if (!influencer || !influencerTweets) {
-                throw new Error('Cannot process user tweets');
+                throw new Error('Cannot process user metrics');
             }
+
+            console.log(influencerTweets);
 
             let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets);
 
@@ -102,7 +104,7 @@ export default class TwitterExtractorMainController {
 
             await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
 
-            await this.userRepository.update(influencerId, ['tweets_count'], [extractedData?.tweets_count]);
+            await this.influencerRepository.update(influencerId, ['tweets_count'], [extractedData?.tweets_count]);
 
         } catch (e) {
             console.log({ e })
@@ -130,7 +132,7 @@ export default class TwitterExtractorMainController {
     async handleProcessInfluencerCheck(user: any, minFollowersCount: number, category: any, geocode: string, fetchFriends = true) {
         if (user.followers_count >= minFollowersCount) {
             // Fetch user tweets
-            const influencerTweets = await this.twitterService.fetchV2UserTweets(user.id);
+            const influencerTweets = await this.twitterService.fetchV2UserTweets(user.id_str);
             // console.log({ influencerTweets })
 
             const keywords = category.keywords.split(', ');
@@ -139,13 +141,13 @@ export default class TwitterExtractorMainController {
 
 
             if (keywords.some((v: any) => user.description.includes(v))) {
-                console.log({ fetchFriends, user: user.screen_name })
+                // console.log({ fetchFriends, user: user.screen_name })
                 // TODO: Also check if the keyword is in the bio.
                 // ALSO:: Check handle
                 console.log("Bio FILTERED:", { user: user.screen_name })
 
                 // Get user location using IPINFO??
-                const insertedUser = await this.userRepository.store(user, category.id, geocode, searchLocation);
+                const insertedUser = await this.influencerRepository.store(user, category.id, geocode, searchLocation);
 
                 if (insertedUser) {
                     await this.categoryRepository.store(insertedUser.id, category.id)
@@ -164,7 +166,7 @@ export default class TwitterExtractorMainController {
 
                 if (userQualifiesAsInfluencer) {
 
-                    let insertedUser = await this.userRepository.store(user, category.id, geocode, searchLocation);
+                    let insertedUser = await this.influencerRepository.store(user, category.id, geocode, searchLocation);
 
                     if (insertedUser) {
                         await this.categoryRepository.store(insertedUser.id, category.id)

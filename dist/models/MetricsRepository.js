@@ -22,19 +22,39 @@ class MetricsRepository extends BaseRepository_1.default {
             try {
                 const { influencer_id, engagement_rate, average_impressions, total_interactions, reach, reachablility, quality_audience_score, brand_safety_level, impressions_count, authentic_engagement, total_tweets, total_likes, total_replies, total_retweets, media_value, average_cpe, average_cpm, best_performing_tweets, most_used_hashtags } = data;
                 const query = {
-                    text: `INSERT IGNORE INTO influencer_metrics SET influencer_id = ?, platform_id = ?, engagement_rate = ?, average_impressions = ?, impressions = ?, interactions = ?, reach = ?, reachability = ?, quality_audience = ?, authentic_engagement = ?, brand_safety_level = ?, total_tweets = ?, total_likes = ?, total_replies = ?, total_retweets = ?, media_value = ?, average_cpe = ?, average_cpm = ?, global_rank = ?, category_rank = ?, country_rank = ?, most_used_hashtags = ?`,
+                    text: `INSERT IGNORE INTO 
+                                influencer_metrics SET influencer_id = ?, 
+                                platform_id = ?,
+                                engagement_rate = ?,
+                                average_impressions = ?,
+                                impressions = ?,
+                                interactions = ?,
+                                reach = ?,
+                                reachability = ?,
+                                quality_audience = ?,
+                                authentic_engagement = ?,
+                                brand_safety_level = ?,
+                                total_tweets = ?,
+                                total_likes = ?,
+                                total_replies = ?,
+                                total_retweets = ?,
+                                media_value = ?,
+                                average_cpe = ?,
+                                average_cpm = ?,
+                                best_performing_tweets = ?,
+                                most_used_hashtags = ?`,
                     values: [
-                        influencer_id,
+                        parseInt(influencer_id),
                         1,
                         engagement_rate,
                         average_impressions,
+                        impressions_count,
                         total_interactions,
                         reach,
                         reachablility,
                         quality_audience_score,
-                        brand_safety_level,
-                        impressions_count,
                         authentic_engagement,
+                        brand_safety_level,
                         total_tweets,
                         total_likes,
                         total_replies,
@@ -42,8 +62,8 @@ class MetricsRepository extends BaseRepository_1.default {
                         media_value,
                         average_cpe,
                         average_cpm,
-                        best_performing_tweets.toString(),
-                        most_used_hashtags.toString()
+                        JSON.stringify(best_performing_tweets),
+                        most_used_hashtags === null || most_used_hashtags === void 0 ? void 0 : most_used_hashtags.toString()
                     ],
                 };
                 yield this.db.query(query);

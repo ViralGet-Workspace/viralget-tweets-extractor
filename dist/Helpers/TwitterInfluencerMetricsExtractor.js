@@ -16,27 +16,28 @@ class TwitterInfluencerMetricsExtractor {
         this.tweets = tweets;
     }
     extract() {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         return __awaiter(this, void 0, void 0, function* () {
             const data = {
                 followers_count: this.getFollowersCount(),
                 following_count: this.getFollowingCount(),
                 tweets_count: this.getTweetsCount(),
-                engagement_rate: this.getEngagementRate().toFixed(2),
-                average_impressions: this.getAverageImpressions().toFixed(2),
+                engagement_rate: (_a = this.getEngagementRate()) === null || _a === void 0 ? void 0 : _a.toFixed(2),
+                average_impressions: (_b = this.getAverageImpressions()) === null || _b === void 0 ? void 0 : _b.toFixed(2),
                 total_interactions: this.getTotalInteractions(),
-                reach: this.getReach().toFixed(0),
-                reachablility: this.getReachability().toFixed(0),
+                reach: (_c = this.getReach()) === null || _c === void 0 ? void 0 : _c.toFixed(0),
+                reachablility: (_d = this.getReachability()) === null || _d === void 0 ? void 0 : _d.toFixed(0),
                 quality_audience_score: this.getQualityAudienceScore(),
-                brand_safety_level: this.getBrandSafetyLevel().toFixed(0),
+                brand_safety_level: (_e = this.getBrandSafetyLevel()) === null || _e === void 0 ? void 0 : _e.toFixed(0),
                 impressions_count: this.getTotalImpressionCount(),
-                authentic_engagement: this.getAuthenticEngagements().toFixed(0),
+                authentic_engagement: (_f = this.getAuthenticEngagements()) === null || _f === void 0 ? void 0 : _f.toFixed(0),
                 total_tweets: this.getTotalFetchedTweets(),
                 total_likes: this.getTotalLikesCount(),
                 total_replies: this.getTotalReplyCount(),
                 total_retweets: this.getTotalRetweetCount(),
-                media_value: this.getMediaValue().toFixed(0),
-                average_cpe: this.getAverageCPE().toFixed(2),
-                average_cpm: this.getAverageCPM().toFixed(5),
+                media_value: (_g = this.getMediaValue()) === null || _g === void 0 ? void 0 : _g.toFixed(0),
+                average_cpe: (_h = this.getAverageCPE()) === null || _h === void 0 ? void 0 : _h.toFixed(2),
+                average_cpm: (_j = this.getAverageCPM()) === null || _j === void 0 ? void 0 : _j.toFixed(5),
                 best_performing_tweets: this.getBestPerformingTweets(),
                 most_used_hashtags: this.getMostUsedHashtags(),
             };
@@ -159,7 +160,6 @@ class TwitterInfluencerMetricsExtractor {
     }
     getEngagementRate() {
         let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getFollowersCount();
-        console.log((this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()));
         return er;
     }
     getAverageImpressions() {

@@ -108,6 +108,7 @@ class API {
   }
 
   handleError(error: any) {
+    console.log(error)
     // console.log({ error })
     return false;
 

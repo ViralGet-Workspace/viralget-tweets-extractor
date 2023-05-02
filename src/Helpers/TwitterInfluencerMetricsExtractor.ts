@@ -18,22 +18,22 @@ export default class TwitterInfluencerMetricsExtractor {
             followers_count: this.getFollowersCount(),
             following_count: this.getFollowingCount(),
             tweets_count: this.getTweetsCount(),
-            engagement_rate: this.getEngagementRate().toFixed(2),
-            average_impressions: this.getAverageImpressions().toFixed(2),
+            engagement_rate: this.getEngagementRate()?.toFixed(2),
+            average_impressions: this.getAverageImpressions()?.toFixed(2),
             total_interactions: this.getTotalInteractions(),
-            reach: this.getReach().toFixed(0),
-            reachablility: this.getReachability().toFixed(0),
+            reach: this.getReach()?.toFixed(0),
+            reachablility: this.getReachability()?.toFixed(0),
             quality_audience_score: this.getQualityAudienceScore(),
-            brand_safety_level: this.getBrandSafetyLevel().toFixed(0),
+            brand_safety_level: this.getBrandSafetyLevel()?.toFixed(0),
             impressions_count: this.getTotalImpressionCount(),
-            authentic_engagement: this.getAuthenticEngagements().toFixed(0),
+            authentic_engagement: this.getAuthenticEngagements()?.toFixed(0),
             total_tweets: this.getTotalFetchedTweets(),
             total_likes: this.getTotalLikesCount(),
             total_replies: this.getTotalReplyCount(),
             total_retweets: this.getTotalRetweetCount(),
-            media_value: this.getMediaValue().toFixed(0),
-            average_cpe: this.getAverageCPE().toFixed(2),
-            average_cpm: this.getAverageCPM().toFixed(5),
+            media_value: this.getMediaValue()?.toFixed(0),
+            average_cpe: this.getAverageCPE()?.toFixed(2),
+            average_cpm: this.getAverageCPM()?.toFixed(5),
             best_performing_tweets: this.getBestPerformingTweets(),
             most_used_hashtags: this.getMostUsedHashtags(),
 
@@ -180,8 +180,6 @@ export default class TwitterInfluencerMetricsExtractor {
     getEngagementRate() {
 
         let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getFollowersCount();
-
-        console.log((this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()));
 
         return er;
     }

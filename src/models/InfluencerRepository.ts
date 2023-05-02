@@ -49,7 +49,7 @@ export default class InfluencerRepository extends BaseRepository {
 
         try {
 
-            const userExists = await this.find(tweetUser.id);
+            const userExists = await this.findByTwitterId(tweetUser.id);
             const username = tweetUser.screen_name;
 
             if (userExists) {
@@ -58,12 +58,12 @@ export default class InfluencerRepository extends BaseRepository {
 
             } else {
 
-                const { id, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at } = tweetUser
+                const { id_str, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at } = tweetUser
 
-                console.log({ id, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at })
+                // console.log({ id, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at })
                 const query = {
                     text: `INSERT IGNORE INTO twitter_influencers SET twitter_id = ?, username = ?, full_name = ?, location = ?, bio = ?, is_protected = ?, followers_count = ?, following_count = ?, is_verified = ?,  profile_photo_url = ?, profile_banner_url = ?, account_created_on = ?, geocode = ?`,
-                    values: [id.toString(), screen_name, name, location ?? searchLocation, description, tweetUser.protected, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url ?? profile_image_url_https, created_at, geocode],
+                    values: [id_str, screen_name, name, location ?? searchLocation, description, tweetUser.protected, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url ?? profile_image_url_https, created_at, geocode],
                 }
                 const user = await this.db.query(query);
 

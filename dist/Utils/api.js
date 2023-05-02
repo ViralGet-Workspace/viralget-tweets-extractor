@@ -119,6 +119,7 @@ class API {
     }
     handleError(error) {
         var _a, _b, _c, _d, _e, _f, _g;
+        console.log(error);
         // console.log({ error })
         return false;
         return {

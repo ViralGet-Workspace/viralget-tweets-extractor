@@ -16,10 +16,10 @@ const __1 = require("..");
 const helpers_1 = require("../Utils/helpers");
 const TwitterService_1 = __importDefault(require("../Services/TwitterService"));
 const TwitterInfluencerMetricsExtractor_1 = __importDefault(require("../Helpers/TwitterInfluencerMetricsExtractor"));
-const InfluencerRepository_1 = __importDefault(require("../models/InfluencerRepository"));
 const TweetRepository_1 = __importDefault(require("../models/TweetRepository"));
 const MetricsRepository_1 = __importDefault(require("../models/MetricsRepository"));
 const CategoryRepository_1 = __importDefault(require("../models/CategoryRepository"));
+const InfluencerRepository_1 = __importDefault(require("../models/InfluencerRepository"));
 const searchLocation = 'Nigeria';
 let keywords = "artwork, art, painting, illustration, digital art, sketch, pencil artist, pencil sketch, pencil on paper, graphite, metal sculpture, wooden sculpture, illustrator, digital artist, graffitti, surrealism, graphic artist, pencil, charcoal, acrylic, canvas, pencils on paper, oil painting, acrylic on canvas, acrylic painting, abstract, art exhibition, pastel paintings, pastel, contemporary art, oil on canvas, portrait, abstract art, drawing, actor, actress, onset, main character, movie, film, actors life, acting, producer, filmmaker, cast, trailer, director, directed by, premiere, thespian, produced, shortfilm, filmmaking, actors, webseries, tvseries, character, commercial model, episode, showing on, screens, starring, cinemas, cinema, production, beauty, makeup, skincare, hydration, cosmetics, skin care routine, mua, skin, glowing, toning, moisturizer, sunscreen, toner, beauty care, beautytips, beauty products, hair, looks, facial, makeup artist, haircare, nails, oil, cleansing, glossier, fragrance, lipstick, beauty basics, glam, brows, organic, skincare tips, blog, news, news & media, gossip, 247 updates, breaking news, trending, viral, news update, lastest news, gossip blog, latest gist, instagram blog, gist, entertainment, viral posts, trending update, funny, comedy, comedian, humor, comedy video, haha, lol, lmao, comedienne, laugh, laughing, live on stage, 😆, standup comedian, standup comedy, laughter, standup, stand up, phone, iphone, smartphone, gadget store, gadgets, accessories, android, apple, samsung, gadget, computer, pc, laptop, pc gaming, gaming pc, electronics, computer graphics, computer accessories, computer hardware, computer world, phones, computers, laptops, uk used, bitcoin, cryptocurrency, blockchain, ethereum, btc, crypto, cryptotrading, nft, altcoins, cryptotrade, bitcoin trading, dogecoin, bitcoinp rice, nfts, trade crypto, crypt orader, crypto market, blockchain technology, bnb, bitcoin mining, altcoin, cryptoworld, crypto news, crypto exchange, dancer, choreographer, choreography, dancing, dance teacher, dancers, hiphop, ballet, dance challenge, song, dance video, ballerina, choreo, dance class, dance classes,  ";
 keywords += "education summit, education, education strategist, business coach, education leadership, leadership coach, learning, school, study, teacher, student, education matters, online learning, business, study abroad, scholar entrepreneur coach, sme, scholarship, literacy, edutech, university, courses, elearning, classroom, school counseling, school counselor, edchat, style, fashion, model, fashion blogger, fashion style, fashionista, instafashion, photoshoot, dress, fashionable, fashiongram, fashion blog, fashion diaries, fashion nova, fashion stylist, fashion girl, fashion illustration, fashion photographer, fashion trends, fashions, fashion look, fashion inspiration, fashion bag, fashion editorial, fashion men, fashion magazine, fashion diaries, fashion week, fashion designer, fashion post, fashion lover, fashion kids, fashion show, fashion model, fashion inspo, fashion design, fashion daily, motherhood, parenting, momlife, family, fatherhood, tips parenting, parenting life, toddler life, family time, home schooling, children, mom blogger, parent life, preschool, parenting hacks, kids, family, parenting tips, parent, toddlers, positive parenting, parenting goals, parenting blog, parenting advice, parenting quotes, parenting memes, parenting101, parenting humor, parenting hacks, parenting advice, parenting problems, family first, family photo, family goals, family fun, family trip, family life, family vacation, family dinner, family holiday, family pic, family adventures, family time, food blogger, recipes, food, breakfast, foodie, delicious, homemade, foodlover, healthy food, restaurant, cooking, lunch, chef, dessert, eat, yummy, foodblog, dinner, cake, chocolate, foodstagram, food diary, wine, meal, dish, drink, cookery, fast food, fine dining, cuisine, tech news, coding, computer science, programming, software, programmer, python, developer, code, java, coder, tech tips, yoga, meditation, yoga junkie, yoga goals, yoga practice, yoga body, yoga inspiration, yoga life, mindfulness, yoga teacher, yoga love, yoga everyday, wellness, yoga girl, yoga pose, yoga poses, yoga journey, yoga pants, yoga daily, yogagram, yoga addict, yogafit, yogafun, yogamom, yoga flow, instayoga, yoga fitness, yoga at home, yoga vibes, yoga therapy, yoga family, yoga girls, yoga journal, yogaart, yoga inspiration, yoga love, yoga practice,";
@@ -28,7 +28,7 @@ class TwitterExtractorMainController {
         this.runCount = 0;
         this.twitterService = new TwitterService_1.default;
         // this.db = new Db;
-        this.userRepository = new InfluencerRepository_1.default;
+        this.influencerRepository = new InfluencerRepository_1.default;
         this.tweetRepository = new TweetRepository_1.default;
         this.metricsRepository = new MetricsRepository_1.default;
         this.categoryRepository = new CategoryRepository_1.default;
@@ -80,12 +80,13 @@ class TwitterExtractorMainController {
             // console.log('SEE ME HEREEEE', { influencer, influencerTweets })
             try {
                 if (!influencer || !influencerTweets) {
-                    throw new Error('Cannot process user tweets');
+                    throw new Error('Cannot process user metrics');
                 }
+                console.log(influencerTweets);
                 let metricsExtractor = new TwitterInfluencerMetricsExtractor_1.default(influencer, influencerTweets);
                 let extractedData = yield metricsExtractor.extract();
                 yield this.metricsRepository.store(Object.assign({ influencer_id: influencerId }, extractedData));
-                yield this.userRepository.update(influencerId, ['tweets_count'], [extractedData === null || extractedData === void 0 ? void 0 : extractedData.tweets_count]);
+                yield this.influencerRepository.update(influencerId, ['tweets_count'], [extractedData === null || extractedData === void 0 ? void 0 : extractedData.tweets_count]);
             }
             catch (e) {
                 console.log({ e });
@@ -114,17 +115,17 @@ class TwitterExtractorMainController {
         return __awaiter(this, void 0, void 0, function* () {
             if (user.followers_count >= minFollowersCount) {
                 // Fetch user tweets
-                const influencerTweets = yield this.twitterService.fetchV2UserTweets(user.id);
+                const influencerTweets = yield this.twitterService.fetchV2UserTweets(user.id_str);
                 // console.log({ influencerTweets })
                 const keywords = category.keywords.split(', ');
                 // if (user.description.includes(keyword)) {
                 if (keywords.some((v) => user.description.includes(v))) {
-                    console.log({ fetchFriends, user: user.screen_name });
+                    // console.log({ fetchFriends, user: user.screen_name })
                     // TODO: Also check if the keyword is in the bio.
                     // ALSO:: Check handle
                     console.log("Bio FILTERED:", { user: user.screen_name });
                     // Get user location using IPINFO??
-                    const insertedUser = yield this.userRepository.store(user, category.id, geocode, searchLocation);
+                    const insertedUser = yield this.influencerRepository.store(user, category.id, geocode, searchLocation);
                     if (insertedUser) {
                         yield this.categoryRepository.store(insertedUser.id, category.id);
                         yield this.processinfluencerTweets(insertedUser.id, user, influencerTweets);
@@ -136,7 +137,7 @@ class TwitterExtractorMainController {
                 else {
                     const userQualifiesAsInfluencer = yield this.checkUserQualifiesAsInfluencer(influencerTweets, category);
                     if (userQualifiesAsInfluencer) {
-                        let insertedUser = yield this.userRepository.store(user, category.id, geocode, searchLocation);
+                        let insertedUser = yield this.influencerRepository.store(user, category.id, geocode, searchLocation);
                         if (insertedUser) {
                             yield this.categoryRepository.store(insertedUser.id, category.id);
                             yield this.processinfluencerTweets(insertedUser.id, user, influencerTweets);
