@@ -50,6 +50,50 @@ class TwitterService {
             return yield this.api.get(url, true);
         });
     }
+    fetchV2Tweets(keyword, next_token = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // console.log({ userId })
+            try {
+                let url = this.baseURLV2 + `tweets/search/recent`;
+                let params = {
+                    'query': keyword,
+                    'max_results': 100,
+                    // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
+                    'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
+                    'expansions': 'attachments.media_keys,attachments.poll_ids',
+                    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+                    'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
+                    'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
+                    'poll.fields': 'options',
+                    // 'exclude': 'retweets,replies',
+                };
+                if (next_token) {
+                    params.next_token = next_token;
+                }
+                return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+            }
+            catch (e) {
+                console.log({ e });
+                return false;
+            }
+        });
+    }
+    fetchV2TweetsCount(keyword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // console.log({ userId })
+            try {
+                let url = this.baseURLV2 + `tweets/counts/recent`;
+                let params = {
+                    'query': keyword,
+                };
+                return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+            }
+            catch (e) {
+                console.log({ e });
+                return false;
+            }
+        });
+    }
     fetchV2UserTweets(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log({ userId })

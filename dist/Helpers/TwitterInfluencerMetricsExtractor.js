@@ -142,8 +142,8 @@ class TwitterInfluencerMetricsExtractor {
     getBrandSafetyLevel() {
         var _a, _b;
         let sensitive_tweets = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.filter((tweet) => tweet.possibly_sensitive);
-        // console.log({ sensitive_tweets: this.tweets });
-        return ((sensitive_tweets === null || sensitive_tweets === void 0 ? void 0 : sensitive_tweets.length) / this.getTotalFetchedTweets()) * 100;
+        let tweets_count = this.getTotalFetchedTweets();
+        return (((sensitive_tweets === null || sensitive_tweets === void 0 ? void 0 : sensitive_tweets.length) / tweets_count) * 100) - 100;
     }
     getTotalInteractions() {
         return this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalLikesCount() + this.getTotalQuoteCount() + this.getTotalMediaViewsCount() + this.getTotalPollsCount();
@@ -209,7 +209,7 @@ class TwitterInfluencerMetricsExtractor {
         return this.getMediaValue() / this.getTotalEngagements();
     }
     getAverageCPM() {
-        return (this.getMediaValue() / this.getTotalImpressionCount()) / 1000;
+        return (this.getMediaValue() / this.getTotalImpressionCount()) * 1000;
     }
 }
 exports.default = TwitterInfluencerMetricsExtractor;

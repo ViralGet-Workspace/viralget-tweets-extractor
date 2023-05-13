@@ -1,41 +1,74 @@
 import MetricsRepository from "../models/MetricsRepository";
 import { numberFormat } from "../Utils/helpers";
 
-export default class TwitterInfluencerMetricsExtractor {
+export default class TwitterKeywordsMetricsExtractor {
 
     private user: any;
     private tweets: any;
 
-    constructor(user: any, tweets: any) {
-        // this.user = user.data;
-        this.user = user;
+    constructor(tweets: any) {
         this.tweets = tweets;
     }
 
 
     public async extract() {
         const data = {
-            followers_count: this.getFollowersCount(),
-            following_count: this.getFollowingCount(),
-            tweets_count: this.getTweetsCount(),
-            engagement_rate: this.getEngagementRate()?.toFixed(2),
-            average_impressions: this.getAverageImpressions()?.toFixed(2),
-            total_interactions: this.getTotalInteractions(),
+            impressions: this.getTotalImpressionCount(),
             reach: this.getReach()?.toFixed(0),
-            reachablility: this.getReachability()?.toFixed(0),
-            quality_audience_score: this.getQualityAudienceScore(),
-            brand_safety_level: this.getBrandSafetyLevel()?.toFixed(0),
-            impressions_count: this.getTotalImpressionCount(),
-            authentic_engagement: this.getAuthenticEngagements()?.toFixed(0),
-            total_tweets: this.getTotalFetchedTweets(),
+            engagement_increase: 0,
+            campaign_score: 0,
+            engagement_rate: this.getEngagementRate()?.toFixed(2),
             total_likes: this.getTotalLikesCount(),
             total_replies: this.getTotalReplyCount(),
             total_retweets: this.getTotalRetweetCount(),
-            media_value: this.getMediaValue()?.toFixed(0),
-            average_cpe: this.getAverageCPE()?.toFixed(2),
-            average_cpm: this.getAverageCPM()?.toFixed(5),
+            media_tweets: 0,
+            link_tweets: 0,
+            text_tweets: 0,
+            no_of_contributors: 0,
+            original_contributors: 0,
+            average_tweet_per_contributor: 0,
+            average_follower_per_contributor: 0,
+            top_contributors: [{
+                username: '@Dlaureate',
+                name: 'Demo name',
+                value: 10,
+            }],
+            best_performing_contributors: [{
+                username: '@Dlaureate',
+                name: 'Demo name',
+                value: 10,
+            }],
+            most_active: [{
+                username: '@Dlaureate',
+                name: 'Demo name',
+                value: 10,
+            }],
+            original_tweets: [{
+                username: '@Dlaureate',
+                name: 'Demo name',
+                value: 10,
+            }],
+            retweeters: [{
+                username: '@Dlaureate',
+                name: 'Demo name',
+                value: 10,
+            }],
+            tweets_count: this.getTweetsCount(),
+            recent_tweets: this.getBestPerformingTweets(),
+            replies_to_tweets: this.getBestPerformingTweets(),
             best_performing_tweets: this.getBestPerformingTweets(),
-            most_used_hashtags: this.getMostUsedHashtags(),
+            best_performing_videos: this.getBestPerformingTweets(),
+
+            // average_impressions: this.getAverageImpressions()?.toFixed(2),
+            // total_interactions: this.getTotalInteractions(),
+            // reachablility: this.getReachability()?.toFixed(0),
+            // quality_audience_score: this.getQualityAudienceScore(),
+            // brand_safety_level: this.getBrandSafetyLevel()?.toFixed(0),
+            // authentic_engagement: this.getAuthenticEngagements()?.toFixed(0),
+            // total_tweets: this.getTotalFetchedTweets(),
+            // media_value: this.getMediaValue()?.toFixed(0),
+            // average_cpe: this.getAverageCPE()?.toFixed(2),
+            // average_cpm: this.getAverageCPM()?.toFixed(5),
 
         }
         // console.log({ data: Object.keys(data) })
@@ -106,7 +139,8 @@ export default class TwitterInfluencerMetricsExtractor {
     getTotalImpressionCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        // console.log({ hello: this.tweets.length })
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.impression_count ?? 0;
         });
 
@@ -229,9 +263,16 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     getBestPerformingTweets() {
-        let tweets = this.tweets.data?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
+        let tweets = this.tweets?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
 
-        return tweets?.slice(0, 5);
+
+        return tweets?.slice(0, 5).map((tweet: any) => ({
+            text: tweet.text,
+            created_at: 'May 02',
+            likes_count: tweet?.public_metrics?.like_count ?? 0,
+            replies_count: tweet?.public_metrics?.reply_count ?? 0,
+            quotes_count: tweet?.public_metrics?.quote_count ?? 0,
+        }));
     }
 
     getMediaValue() {
