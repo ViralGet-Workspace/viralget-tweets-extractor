@@ -3,12 +3,15 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import TwitterInfluencerExtractorMainController from './controllers/TwitterInfluencerExtractorMainController.js';
 import TwitterKeywordsExtractorMainController from './controllers/TwitterKeywordsExtractorMainController.js';
+import cors from 'cors';
 
 sourceMapSupport.install();
 dotenv.config()
 
 const port = 8002;
 const app = express();
+app.use(cors());
+
 const twitterExtractorMainController = new TwitterInfluencerExtractorMainController();
 const twitterKeywordsExtractorMainController = new TwitterKeywordsExtractorMainController();
 

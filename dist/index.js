@@ -40,10 +40,12 @@ const dotenv = __importStar(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const TwitterInfluencerExtractorMainController_js_1 = __importDefault(require("./controllers/TwitterInfluencerExtractorMainController.js"));
 const TwitterKeywordsExtractorMainController_js_1 = __importDefault(require("./controllers/TwitterKeywordsExtractorMainController.js"));
+const cors_1 = __importDefault(require("cors"));
 source_map_support_1.default.install();
 dotenv.config();
 const port = 8002;
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
 const twitterExtractorMainController = new TwitterInfluencerExtractorMainController_js_1.default();
 const twitterKeywordsExtractorMainController = new TwitterKeywordsExtractorMainController_js_1.default();
 app.get("/", (req, res) => {

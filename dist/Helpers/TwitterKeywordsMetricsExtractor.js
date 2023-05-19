@@ -9,59 +9,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("../Utils/helpers");
 class TwitterKeywordsMetricsExtractor {
-    constructor(tweets) {
-        this.tweets = tweets;
+    constructor(data) {
+        this.tweets = data.tweets;
+        this.users = data.users;
+        this.media = data.media;
     }
     extract() {
-        var _a, _b;
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
             const data = {
                 impressions: this.getTotalImpressionCount(),
                 reach: (_a = this.getReach()) === null || _a === void 0 ? void 0 : _a.toFixed(0),
-                engagement_increase: 0,
-                campaign_score: 0,
+                campaign_value: this.getCampaignValue(),
                 engagement_rate: (_b = this.getEngagementRate()) === null || _b === void 0 ? void 0 : _b.toFixed(2),
+                engagements: (_c = this.getTotalEngagements()) === null || _c === void 0 ? void 0 : _c.toFixed(0),
                 total_likes: this.getTotalLikesCount(),
                 total_replies: this.getTotalReplyCount(),
                 total_retweets: this.getTotalRetweetCount(),
-                media_tweets: 0,
-                link_tweets: 0,
-                text_tweets: 0,
-                no_of_contributors: 0,
-                original_contributors: 0,
-                average_tweet_per_contributor: 0,
-                average_follower_per_contributor: 0,
-                top_contributors: [{
-                        username: '@Dlaureate',
-                        name: 'Demo name',
-                        value: 10,
-                    }],
-                best_performing_contributors: [{
-                        username: '@Dlaureate',
-                        name: 'Demo name',
-                        value: 10,
-                    }],
-                most_active: [{
-                        username: '@Dlaureate',
-                        name: 'Demo name',
-                        value: 10,
-                    }],
-                original_tweets: [{
-                        username: '@Dlaureate',
-                        name: 'Demo name',
-                        value: 10,
-                    }],
-                retweeters: [{
-                        username: '@Dlaureate',
-                        name: 'Demo name',
-                        value: 10,
-                    }],
+                media_tweets: this.getTotalMediaTweetsCount(),
+                link_tweets: this.getTotalLinkTweetsCount(),
+                text_tweets: this.getTotalTextTweetsCount(),
+                no_of_contributors: this.users.length,
+                original_contributors: (_d = this.getOriginalContributors()) === null || _d === void 0 ? void 0 : _d.length,
+                average_tweet_per_contributor: this.getAverageTweetPerContributor(),
+                average_follower_per_contributor: this.getAverageFollowerPerContributor(),
+                top_contributors: this.getTopContributors(),
+                best_performing_contributors: this.getBestPerformingContributors(),
+                most_active: this.getMostActiveContributors(),
+                original_tweets: this.getTopOriginalTweetsContributors(),
+                retweeters: this.getTopRetweeters(),
+                //     [{
+                //     username: '@Dlaureate',
+                //     name: 'Demo name',
+                //     value: 10,
+                //     profile_image_url: 'https://placeimg.com/640/480/any',
+                // }],
                 tweets_count: this.getTweetsCount(),
-                recent_tweets: this.getBestPerformingTweets(),
-                replies_to_tweets: this.getBestPerformingTweets(),
+                recent_tweets: this.getRecentTweets(),
+                replies_to_tweets: this.getRepliesToTweets(),
                 best_performing_tweets: this.getBestPerformingTweets(),
-                best_performing_videos: this.getBestPerformingTweets(),
+                best_performing_videos: this.getBestPerformingVideos(),
                 // average_impressions: this.getAverageImpressions()?.toFixed(2),
                 // total_interactions: this.getTotalInteractions(),
                 // reachablility: this.getReachability()?.toFixed(0),
@@ -78,59 +67,64 @@ class TwitterKeywordsMetricsExtractor {
         });
     }
     getTotalFetchedTweets() {
-        var _a, _b, _c;
-        return (_c = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
-    }
-    getFollowersCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.followers_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.followers_count;
-    }
-    getFollowingCount() {
-        var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.friends_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.following_count;
-    }
-    getTweetsCount() {
-        var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.statuses_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.tweet_count;
+        return (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
     }
     getTotalLikesCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.like_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalRetweetCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.retweet_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalReplyCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.reply_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalQuoteCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.quote_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
+    }
+    getTotalMediaTweetsCount() {
+        return this.media.length;
+    }
+    getTotalLinkTweetsCount() {
+        var _a;
+        let sum = 0;
+        // console.log({ hello: this.tweets.length })
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
+            var _a, _b, _c;
+            sum += (_c = (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.entities) === null || _a === void 0 ? void 0 : _a.urls) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
+        });
+        return sum;
+    }
+    getTotalTextTweetsCount() {
+        // Media is inclusive in link tweets
+        return this.tweets.length - this.getTotalLinkTweetsCount();
+    }
+    getCampaignValue() {
+        return 0;
     }
     getTotalImpressionCount() {
         var _a;
@@ -143,11 +137,11 @@ class TwitterKeywordsMetricsExtractor {
         return sum;
     }
     // getLinksClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
     //     return sum;
     // }
     // getProfileLinkClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
     //     return sum;
     // }
     getTotalMediaViewsCount() {
@@ -173,8 +167,8 @@ class TwitterKeywordsMetricsExtractor {
         return sum;
     }
     getBrandSafetyLevel() {
-        var _a, _b;
-        let sensitive_tweets = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.filter((tweet) => tweet.possibly_sensitive);
+        var _a;
+        let sensitive_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.possibly_sensitive);
         let tweets_count = this.getTotalFetchedTweets();
         return (((sensitive_tweets === null || sensitive_tweets === void 0 ? void 0 : sensitive_tweets.length) / tweets_count) * 100) - 100;
     }
@@ -192,8 +186,16 @@ class TwitterKeywordsMetricsExtractor {
         return 0;
     }
     getEngagementRate() {
-        let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getFollowersCount();
+        let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getTotalFollowersCount();
         return er;
+    }
+    getTotalFollowersCount() {
+        let sum = 0;
+        this.users.map((user) => {
+            var _a;
+            sum += (_a = user.public_metrics) === null || _a === void 0 ? void 0 : _a.followers_count;
+        });
+        return sum;
     }
     getAverageImpressions() {
         return this.getTotalImpressionCount() / this.getTotalFetchedTweets();
@@ -212,9 +214,9 @@ class TwitterKeywordsMetricsExtractor {
         return this.getReach() * 1000;
     }
     getTweetsHashtags() {
-        var _a, _b;
+        var _a;
         const hashtags = {};
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             (_b = (_a = tweet.entities) === null || _a === void 0 ? void 0 : _a.hashtags) === null || _b === void 0 ? void 0 : _b.forEach((hashtag) => {
                 let tag = hashtag === null || hashtag === void 0 ? void 0 : hashtag.tag;
@@ -230,28 +232,86 @@ class TwitterKeywordsMetricsExtractor {
         });
         return Object.keys(hashtags).sort((a, b) => hashtags[a] - hashtags[b]);
     }
+    getRecentTweets() {
+        var _a;
+        return (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.slice(0, 5).map((tweet) => this.formatTweet(tweet));
+    }
     getBestPerformingTweets() {
         var _a;
         let tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });
-        return tweets === null || tweets === void 0 ? void 0 : tweets.slice(0, 5).map((tweet) => {
-            var _a, _b, _c, _d, _e, _f;
-            return ({
-                text: tweet.text,
-                created_at: 'May 02',
-                likes_count: (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.like_count) !== null && _b !== void 0 ? _b : 0,
-                replies_count: (_d = (_c = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _c === void 0 ? void 0 : _c.reply_count) !== null && _d !== void 0 ? _d : 0,
-                quotes_count: (_f = (_e = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _e === void 0 ? void 0 : _e.quote_count) !== null && _f !== void 0 ? _f : 0,
-            });
+        return tweets === null || tweets === void 0 ? void 0 : tweets.slice(0, 5).map((tweet) => this.formatTweet(tweet));
+    }
+    getBestPerformingVideos() {
+        var _a;
+        let media = (_a = this.media) === null || _a === void 0 ? void 0 : _a.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.view_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.view_count); });
+        return media === null || media === void 0 ? void 0 : media.slice(0, 5).map((media) => {
+            return {
+                tweet: this.findMediaTweet(media.media_key),
+                media,
+            };
         });
     }
-    getMediaValue() {
-        return (this.getAverageImpressions() * 360) / 1000;
+    findMediaTweet(media_key) {
+        this.tweets.filter((tweet) => { var _a, _b; return (_b = (_a = tweet.attachments) === null || _a === void 0 ? void 0 : _a.media_keys) === null || _b === void 0 ? void 0 : _b.includes(media_key); });
     }
-    getAverageCPE() {
-        return this.getMediaValue() / this.getTotalEngagements();
+    getOriginalContributors() {
+        var _a;
+        const filtered_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => !tweet.referenced_tweets);
+        let data = filtered_tweets.map((tweet) => ({
+            user: this.users[tweet.author_id],
+            tweet: this.formatTweet(tweet),
+        }));
+        data = data.sort((a, b) => { var _a, _b, _c, _d; return ((_b = (_a = a.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.tweet_count) < ((_d = (_c = b.user) === null || _c === void 0 ? void 0 : _c.public_metrics) === null || _d === void 0 ? void 0 : _d.tweet_count); });
+        // data.map((tweet:any) => )
+        return data;
     }
-    getAverageCPM() {
-        return (this.getMediaValue() / this.getTotalImpressionCount()) * 1000;
+    getRepliesToTweets() {
+        var _a;
+        const filtered_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.referenced_tweets);
+        const data = filtered_tweets.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.tweet_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.tweet_count); });
+        return data.slice(0, 5);
+    }
+    getAverageTweetPerContributor() {
+        let total_contributors = 0;
+        this.users.map((user) => {
+            var _a;
+            total_contributors += (_a = user.public_metrics) === null || _a === void 0 ? void 0 : _a.tweet_count;
+        });
+        return total_contributors / this.users.length;
+    }
+    getAverageFollowerPerContributor() {
+        return this.getTotalFollowersCount() / this.users.length;
+    }
+    getTopContributors() {
+        return [];
+        // let contributors = this.getOriginalContributors();
+        // return contributors?.slice(0, 5);
+    }
+    getBestPerformingContributors() {
+        return [];
+    }
+    getMostActiveContributors() {
+        return [];
+    }
+    getTopOriginalTweetsContributors() {
+        return [];
+    }
+    getTopRetweeters() {
+        return [];
+    }
+    getTweetsCount() {
+        return this.tweets.length;
+    }
+    formatTweet(tweet) {
+        var _a, _b, _c;
+        // console.log({ tweet })
+        return {
+            text: tweet.text,
+            created_at: (0, helpers_1.formatDate)(tweet.created_at),
+            replies: (_a = tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.reply_count,
+            quotes: (_b = tweet.public_metrics) === null || _b === void 0 ? void 0 : _b.quote_count,
+            likes: (_c = tweet.public_metrics) === null || _c === void 0 ? void 0 : _c.like_count,
+        };
     }
 }
 exports.default = TwitterKeywordsMetricsExtractor;

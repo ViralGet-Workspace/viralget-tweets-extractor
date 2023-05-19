@@ -38,37 +38,38 @@ class TwitterKeywordsExtractorMainController {
     extractKeyword(keyword) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const tweets = yield this.fetchByKeyword(keyword);
-                if (!tweets) {
+                const data = yield this.fetchByKeyword(keyword);
+                if (!data) {
                     throw new Error("No tweet found");
                 }
-                this.logger.debug({ tweets: tweets.length });
-                let metricsExtractor = new TwitterKeywordsMetricsExtractor_1.default(tweets);
+                // this.logger.debug({ tweets: data.length, })
+                let metricsExtractor = new TwitterKeywordsMetricsExtractor_1.default(data);
                 const extractedData = yield metricsExtractor.extract();
+                // return { "impressions": { "value": 2, "growth": 0.1 }, "reach": { "value": "1", "growth": -0.1 }, "engagement_increase": { "value": 0, "growth": 0 }, "campaign_score": { "value": 0, "growth": 0 }, "engagement_rate": { "value": "0.24", "growth": 0 }, "total_likes": { "value": 0, "growth": 0.5 }, "total_replies": { "value": 0, "growth": 0 }, "total_retweets": { "value": 0, "growth": 0 }, "media_tweets": { "value": 0, "growth": 0 }, "link_tweets": { "value": 0, "growth": 0 }, "text_tweets": { "value": 0, "growth": 0 }, "no_of_contributors": 0, "original_contributors": 0, "average_tweet_per_contributor": 0, "average_follower_per_contributor": 0, "top_contributors": [{ "username": "@Dlaureate", "name": "Demo name", "value": 10 }], "best_performing_contributors": [{ "username": "@Dlaureate", "name": "Demo name", "value": 10 }], "most_active": [{ "username": "@Dlaureate", "name": "Demo name", "value": 10 }], "original_tweets": [{ "username": "@Dlaureate", "name": "Demo name", "value": 10 }], "retweeters": [{ "username": "@Dlaureate", "name": "Demo name", "value": 10 }], "tweets_count": 0, "recent_tweets": [{ "text": "Top #Farming pools for today 🔝\n\n💸 $TND / $WETH — 3,536.45%\n💸 $WOM / $USDT — 3,709.17%\n💸 $WINR / $USDC — 3,513.38%\n\n[2d2c11]\nFarm profitable pairs 👉 https://t.co/UzwOks4BVZ #swaprum #Arbitrum #DeFi #ARB #SAPR", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @CerveauxNon: 🔴 QUAND LE FOND MARIANNE FINANCE L'EXTRÊME DROITE.\n\nLe scandale sur le #FondMarianne continue. @Mediapart révèle que le fo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @AunindyoC: B/w 2016-17 &amp; 2019-20, Karnataka got 2.2% of the total Budget of the Centre.\n\nThanks to the 15th finance commission, the sta…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @Swaprum: 🚀Discover DeFi's power with SAPR &amp; ARB, the top staking pair! \nEarn up to 5 $ARB daily with @Swaprum. \nMore rewards? Invite yo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "🤑 Join the best Yield #Farming pools and earn high APR:\n\n💰 $SAPR / $WETH – 1,267% APR\n💰 $USDC / $USDT – 330.26% APR\n💰 $USDT / $WETH – 769% APR\n💰 $ARB / $WETH – 826% APR\n\n[f3133f]\nTry it right now 👉 https://t.co/TSOhQ95X1X #swaprum #Arbitrum #DeFi #ARB #SAPR #Dex", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }], "replies_to_tweets": [{ "text": "Top #Farming pools for today 🔝\n\n💸 $TND / $WETH — 3,536.45%\n💸 $WOM / $USDT — 3,709.17%\n💸 $WINR / $USDC — 3,513.38%\n\n[2d2c11]\nFarm profitable pairs 👉 https://t.co/UzwOks4BVZ #swaprum #Arbitrum #DeFi #ARB #SAPR", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @CerveauxNon: 🔴 QUAND LE FOND MARIANNE FINANCE L'EXTRÊME DROITE.\n\nLe scandale sur le #FondMarianne continue. @Mediapart révèle que le fo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @AunindyoC: B/w 2016-17 &amp; 2019-20, Karnataka got 2.2% of the total Budget of the Centre.\n\nThanks to the 15th finance commission, the sta…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @Swaprum: 🚀Discover DeFi's power with SAPR &amp; ARB, the top staking pair! \nEarn up to 5 $ARB daily with @Swaprum. \nMore rewards? Invite yo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "🤑 Join the best Yield #Farming pools and earn high APR:\n\n💰 $SAPR / $WETH – 1,267% APR\n💰 $USDC / $USDT – 330.26% APR\n💰 $USDT / $WETH – 769% APR\n💰 $ARB / $WETH – 826% APR\n\n[f3133f]\nTry it right now 👉 https://t.co/TSOhQ95X1X #swaprum #Arbitrum #DeFi #ARB #SAPR #Dex", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }], "best_performing_tweets": [{ "text": "Top #Farming pools for today 🔝\n\n💸 $TND / $WETH — 3,536.45%\n💸 $WOM / $USDT — 3,709.17%\n💸 $WINR / $USDC — 3,513.38%\n\n[2d2c11]\nFarm profitable pairs 👉 https://t.co/UzwOks4BVZ #swaprum #Arbitrum #DeFi #ARB #SAPR", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @CerveauxNon: 🔴 QUAND LE FOND MARIANNE FINANCE L'EXTRÊME DROITE.\n\nLe scandale sur le #FondMarianne continue. @Mediapart révèle que le fo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @AunindyoC: B/w 2016-17 &amp; 2019-20, Karnataka got 2.2% of the total Budget of the Centre.\n\nThanks to the 15th finance commission, the sta…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @Swaprum: 🚀Discover DeFi's power with SAPR &amp; ARB, the top staking pair! \nEarn up to 5 $ARB daily with @Swaprum. \nMore rewards? Invite yo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "🤑 Join the best Yield #Farming pools and earn high APR:\n\n💰 $SAPR / $WETH – 1,267% APR\n💰 $USDC / $USDT – 330.26% APR\n💰 $USDT / $WETH – 769% APR\n💰 $ARB / $WETH – 826% APR\n\n[f3133f]\nTry it right now 👉 https://t.co/TSOhQ95X1X #swaprum #Arbitrum #DeFi #ARB #SAPR #Dex", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }], "best_performing_videos": [{ "text": "Top #Farming pools for today 🔝\n\n💸 $TND / $WETH — 3,536.45%\n💸 $WOM / $USDT — 3,709.17%\n💸 $WINR / $USDC — 3,513.38%\n\n[2d2c11]\nFarm profitable pairs 👉 https://t.co/UzwOks4BVZ #swaprum #Arbitrum #DeFi #ARB #SAPR", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @CerveauxNon: 🔴 QUAND LE FOND MARIANNE FINANCE L'EXTRÊME DROITE.\n\nLe scandale sur le #FondMarianne continue. @Mediapart révèle que le fo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @AunindyoC: B/w 2016-17 &amp; 2019-20, Karnataka got 2.2% of the total Budget of the Centre.\n\nThanks to the 15th finance commission, the sta…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "RT @Swaprum: 🚀Discover DeFi's power with SAPR &amp; ARB, the top staking pair! \nEarn up to 5 $ARB daily with @Swaprum. \nMore rewards? Invite yo…", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }, { "text": "🤑 Join the best Yield #Farming pools and earn high APR:\n\n💰 $SAPR / $WETH – 1,267% APR\n💰 $USDC / $USDT – 330.26% APR\n💰 $USDT / $WETH – 769% APR\n💰 $ARB / $WETH – 826% APR\n\n[f3133f]\nTry it right now 👉 https://t.co/TSOhQ95X1X #swaprum #Arbitrum #DeFi #ARB #SAPR #Dex", "created_at": "May 02", "likes_count": 0, "replies_count": 0, "quotes_count": 0 }] }
                 return {
                     impressions: {
                         value: extractedData.impressions,
-                        growth: 0.10
+                        growth: 0
                     },
                     reach: {
                         value: extractedData.reach,
-                        growth: -0.10
-                    },
-                    engagement_increase: {
-                        value: extractedData.engagement_increase,
-                        growth: 0
-                    },
-                    campaign_score: {
-                        value: extractedData.campaign_score,
                         growth: 0
                     },
                     engagement_rate: {
                         value: extractedData.engagement_rate,
                         growth: 0
                     },
+                    engagements: {
+                        value: extractedData.engagements,
+                        growth: 0
+                    },
+                    campaign_score: {
+                        value: extractedData.campaign_value,
+                        growth: 0
+                    },
                     total_likes: {
                         value: extractedData.total_likes,
-                        growth: 0.5
+                        growth: 0
                     },
                     total_replies: {
                         value: extractedData.total_replies,
@@ -90,15 +91,15 @@ class TwitterKeywordsExtractorMainController {
                         value: extractedData.text_tweets,
                         growth: 0
                     },
-                    no_of_contributors: 0,
-                    original_contributors: 0,
-                    average_tweet_per_contributor: 0,
-                    average_follower_per_contributor: 0,
-                    top_contributors: [],
-                    best_performing_contributors: [],
-                    most_active: [],
-                    original_tweets: [],
-                    retweeters: [],
+                    no_of_contributors: extractedData.no_of_contributors,
+                    original_contributors: extractedData.original_contributors,
+                    average_tweet_per_contributor: extractedData.average_tweet_per_contributor,
+                    average_follower_per_contributor: extractedData.average_follower_per_contributor,
+                    top_contributors: extractedData.top_contributors,
+                    best_performing_contributors: extractedData.best_performing_contributors,
+                    most_active: extractedData.most_active,
+                    original_tweets: extractedData.original_tweets,
+                    retweeters: extractedData.retweeters,
                     tweets_count: extractedData.tweets_count,
                     recent_tweets: extractedData.recent_tweets,
                     replies_to_tweets: extractedData.replies_to_tweets,
@@ -109,27 +110,32 @@ class TwitterKeywordsExtractorMainController {
                 // this.twitterService.extractKeyword(keyword);
             }
             catch (e) {
-                this.logger.debug('An error occured' + { e });
+                this.logger.debug('An error occured' + e.message + e.stack);
                 return [];
             }
         });
     }
-    fetchByKeyword(keyword, tweets = [], next_token = null) {
-        var _a;
+    fetchByKeyword(keyword, data = {}, next_token = null) {
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             this.runCount += 1;
             const response = yield this.twitterService.fetchV2Tweets(keyword, next_token);
+            // this.logger.debug(JSON.stringify(response))
             // console.log({ length: tweets.length, data: response.data })
             if (!response || !response.data || !((_a = response === null || response === void 0 ? void 0 : response.meta) === null || _a === void 0 ? void 0 : _a.next_token) || this.runCount >= 2) {
                 this.logger.debug('keyword: ' + keyword + ' No more results found.');
-                return tweets;
+                return data;
             }
+            let { tweets = [], users = [], media = [] } = data;
             // console.log({ d: response.data });
             tweets = [...tweets, ...response.data];
-            this.logger.debug(`Run count: ${this.runCount}. Tweets count: ${tweets.length}`);
+            users = [...users, ...(_b = response === null || response === void 0 ? void 0 : response.includes.users) !== null && _b !== void 0 ? _b : []];
+            media = [...media, ...(_c = response === null || response === void 0 ? void 0 : response.includes.media) !== null && _c !== void 0 ? _c : []];
+            data = { tweets, users, media };
+            this.logger.debug(`Run count: ${this.runCount}. Tweets count: ${data.tweets.length}`);
             yield (0, helpers_1.sleep)();
             // run again tillt there's no more 
-            return yield this.fetchByKeyword(keyword, tweets, response.meta.next_token);
+            return yield this.fetchByKeyword(keyword, data, response.meta.next_token);
         });
     }
     fetchAllRecords(keyword) {

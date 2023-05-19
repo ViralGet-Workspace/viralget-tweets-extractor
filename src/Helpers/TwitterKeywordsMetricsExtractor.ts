@@ -1,13 +1,16 @@
 import MetricsRepository from "../models/MetricsRepository";
-import { numberFormat } from "../Utils/helpers";
+import { formatDate, numberFormat } from "../Utils/helpers";
 
 export default class TwitterKeywordsMetricsExtractor {
 
-    private user: any;
+    private users: any;
     private tweets: any;
+    private media: any;
 
-    constructor(tweets: any) {
-        this.tweets = tweets;
+    constructor(data: any) {
+        this.tweets = data.tweets;
+        this.users = data.users;
+        this.media = data.media;
     }
 
 
@@ -15,49 +18,36 @@ export default class TwitterKeywordsMetricsExtractor {
         const data = {
             impressions: this.getTotalImpressionCount(),
             reach: this.getReach()?.toFixed(0),
-            engagement_increase: 0,
-            campaign_score: 0,
+            campaign_value: this.getCampaignValue(),
             engagement_rate: this.getEngagementRate()?.toFixed(2),
+            engagements: this.getTotalEngagements()?.toFixed(0),
             total_likes: this.getTotalLikesCount(),
             total_replies: this.getTotalReplyCount(),
             total_retweets: this.getTotalRetweetCount(),
-            media_tweets: 0,
-            link_tweets: 0,
-            text_tweets: 0,
-            no_of_contributors: 0,
-            original_contributors: 0,
-            average_tweet_per_contributor: 0,
-            average_follower_per_contributor: 0,
-            top_contributors: [{
-                username: '@Dlaureate',
-                name: 'Demo name',
-                value: 10,
-            }],
-            best_performing_contributors: [{
-                username: '@Dlaureate',
-                name: 'Demo name',
-                value: 10,
-            }],
-            most_active: [{
-                username: '@Dlaureate',
-                name: 'Demo name',
-                value: 10,
-            }],
-            original_tweets: [{
-                username: '@Dlaureate',
-                name: 'Demo name',
-                value: 10,
-            }],
-            retweeters: [{
-                username: '@Dlaureate',
-                name: 'Demo name',
-                value: 10,
-            }],
+            media_tweets: this.getTotalMediaTweetsCount(),
+            link_tweets: this.getTotalLinkTweetsCount(),
+            text_tweets: this.getTotalTextTweetsCount(),
+            no_of_contributors: this.users.length,
+            original_contributors: this.getOriginalContributors()?.length,
+            average_tweet_per_contributor: this.getAverageTweetPerContributor(),
+            average_follower_per_contributor: this.getAverageFollowerPerContributor(),
+            top_contributors: this.getTopContributors(),
+            best_performing_contributors: this.getBestPerformingContributors(),
+            most_active: this.getMostActiveContributors(),
+            original_tweets: this.getTopOriginalTweetsContributors(),
+            retweeters: this.getTopRetweeters(),
+            //     [{
+            //     username: '@Dlaureate',
+            //     name: 'Demo name',
+            //     value: 10,
+            //     profile_image_url: 'https://placeimg.com/640/480/any',
+            // }],
+
             tweets_count: this.getTweetsCount(),
-            recent_tweets: this.getBestPerformingTweets(),
-            replies_to_tweets: this.getBestPerformingTweets(),
+            recent_tweets: this.getRecentTweets(),
+            replies_to_tweets: this.getRepliesToTweets(),
             best_performing_tweets: this.getBestPerformingTweets(),
-            best_performing_videos: this.getBestPerformingTweets(),
+            best_performing_videos: this.getBestPerformingVideos(),
 
             // average_impressions: this.getAverageImpressions()?.toFixed(2),
             // total_interactions: this.getTotalInteractions(),
@@ -76,30 +66,15 @@ export default class TwitterKeywordsMetricsExtractor {
         return data;
     }
 
-
     getTotalFetchedTweets() {
-        return this.tweets?.data?.length ?? 0;
+        return this.tweets?.length ?? 0;
     }
 
-    getFollowersCount() {
-        return this.user?.followers_count ?? 0;
-        // return this.user?.public_metrics?.followers_count;
-    }
-
-    getFollowingCount() {
-        return this.user?.friends_count ?? 0;
-        // return this.user?.public_metrics?.following_count;
-    }
-
-    getTweetsCount() {
-        return this.user?.statuses_count ?? 0;
-        // return this.user?.public_metrics?.tweet_count;
-    }
 
     getTotalLikesCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.like_count ?? 0;
         });
 
@@ -109,7 +84,7 @@ export default class TwitterKeywordsMetricsExtractor {
     getTotalRetweetCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.retweet_count ?? 0;
         });
 
@@ -119,7 +94,7 @@ export default class TwitterKeywordsMetricsExtractor {
     getTotalReplyCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.reply_count ?? 0;
         });
 
@@ -129,12 +104,37 @@ export default class TwitterKeywordsMetricsExtractor {
     getTotalQuoteCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.quote_count ?? 0;
         });
 
         return sum;
     }
+
+    getTotalMediaTweetsCount() {
+        return this.media.length;
+    }
+
+    getTotalLinkTweetsCount() {
+        let sum = 0;
+
+        // console.log({ hello: this.tweets.length })
+        this.tweets?.forEach((tweet: any) => {
+            sum += tweet?.entities?.urls?.length ?? 0;
+        });
+
+        return sum;
+    }
+
+    getTotalTextTweetsCount() {
+        // Media is inclusive in link tweets
+        return this.tweets.length - this.getTotalLinkTweetsCount();
+    }
+
+    getCampaignValue() {
+        return 0;
+    }
+
 
     getTotalImpressionCount() {
         let sum = 0;
@@ -148,13 +148,13 @@ export default class TwitterKeywordsMetricsExtractor {
     }
 
     // getLinksClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
 
     //     return sum;
     // }
 
     // getProfileLinkClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
 
     //     return sum;
     // }
@@ -188,7 +188,7 @@ export default class TwitterKeywordsMetricsExtractor {
 
 
     getBrandSafetyLevel() {
-        let sensitive_tweets = this.tweets?.data?.filter((tweet: any) => tweet.possibly_sensitive);
+        let sensitive_tweets = this.tweets?.filter((tweet: any) => tweet.possibly_sensitive);
 
 
         let tweets_count = this.getTotalFetchedTweets();
@@ -215,9 +215,19 @@ export default class TwitterKeywordsMetricsExtractor {
 
     getEngagementRate() {
 
-        let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getFollowersCount();
+        let er = (this.getTotalLikesCount() + this.getTotalRetweetCount() + this.getTotalReplyCount() + this.getTotalQuoteCount()) / this.getTotalFollowersCount();
 
         return er;
+    }
+
+    getTotalFollowersCount() {
+        let sum = 0;
+
+        this.users.map((user: any) => {
+            sum += user.public_metrics?.followers_count
+        });
+
+        return sum;
     }
 
     getAverageImpressions() {
@@ -245,7 +255,7 @@ export default class TwitterKeywordsMetricsExtractor {
     getTweetsHashtags() {
         const hashtags: any = {};
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             tweet.entities?.hashtags?.forEach((hashtag: any) => {
                 let tag = hashtag?.tag;
 
@@ -262,28 +272,112 @@ export default class TwitterKeywordsMetricsExtractor {
         return Object.keys(hashtags).sort((a: any, b: any) => hashtags[a] - hashtags[b]);
     }
 
+    getRecentTweets() {
+        return this.tweets?.slice(0, 5).map((tweet: any) => this.formatTweet(tweet));
+    }
+
     getBestPerformingTweets() {
         let tweets = this.tweets?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
 
 
-        return tweets?.slice(0, 5).map((tweet: any) => ({
-            text: tweet.text,
-            created_at: 'May 02',
-            likes_count: tweet?.public_metrics?.like_count ?? 0,
-            replies_count: tweet?.public_metrics?.reply_count ?? 0,
-            quotes_count: tweet?.public_metrics?.quote_count ?? 0,
+        return tweets?.slice(0, 5).map((tweet: any) => this.formatTweet(tweet));
+    }
+
+
+    getBestPerformingVideos() {
+        let media = this.media?.sort((a: any, b: any) => a.public_metrics?.view_count < b.public_metrics?.view_count);
+
+
+        return media?.slice(0, 5).map((media: any) => {
+
+            return {
+                tweet: this.findMediaTweet(media.media_key),
+                media,
+            }
+        });
+    }
+
+    findMediaTweet(media_key: string) {
+        this.tweets.filter((tweet: any) => tweet.attachments?.media_keys?.includes(media_key))
+    }
+
+
+    getOriginalContributors() {
+        const filtered_tweets = this.tweets?.filter((tweet: any) => !tweet.referenced_tweets);
+
+        let data = filtered_tweets.map((tweet: any) => ({
+            user: this.users[tweet.author_id],
+            tweet: this.formatTweet(tweet),
         }));
+
+        data = data.sort((a: any, b: any) => a.user?.public_metrics?.tweet_count < b.user?.public_metrics?.tweet_count);
+        // data.map((tweet:any) => )
+
+
+        return data;
     }
 
-    getMediaValue() {
-        return (this.getAverageImpressions() * 360) / 1000;
+
+    getRepliesToTweets() {
+        const filtered_tweets = this.tweets?.filter((tweet: any) => tweet.referenced_tweets);
+
+        const data = filtered_tweets.sort((a: any, b: any) => a.public_metrics?.tweet_count < b.public_metrics?.tweet_count);
+
+        return data.slice(0, 5);
     }
 
-    getAverageCPE() {
-        return this.getMediaValue() / this.getTotalEngagements();
+
+
+    getAverageTweetPerContributor() {
+        let total_contributors = 0;
+
+        this.users.map((user: any) => {
+            total_contributors += user.public_metrics?.tweet_count
+        });
+
+        return total_contributors / this.users.length;
     }
 
-    getAverageCPM() {
-        return (this.getMediaValue() / this.getTotalImpressionCount()) * 1000;
+    getAverageFollowerPerContributor() {
+        return this.getTotalFollowersCount() / this.users.length;
+    }
+
+    getTopContributors() {
+        return []
+        // let contributors = this.getOriginalContributors();
+
+        // return contributors?.slice(0, 5);
+    }
+
+    getBestPerformingContributors() {
+        return []
+    }
+
+    getMostActiveContributors() {
+        return []
+    }
+
+    getTopOriginalTweetsContributors() {
+        return []
+    }
+
+    getTopRetweeters() {
+        return [];
+    }
+
+    getTweetsCount() {
+        return this.tweets.length;
+    }
+
+
+    formatTweet(tweet: any) {
+        // console.log({ tweet })
+        return {
+            text: tweet.text,
+            created_at: formatDate(tweet.created_at),
+            replies: tweet.public_metrics?.reply_count,
+            quotes: tweet.public_metrics?.quote_count,
+            likes: tweet.public_metrics?.like_count,
+        }
     }
 }
