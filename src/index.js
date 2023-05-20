@@ -29,7 +29,7 @@ app.get("/twitter/extract-keywords", async (req, res) => {
 
     const data = await twitterKeywordsExtractorMainController.extractKeyword(keyword);
 
-    res.send({ status: true, data });
+    res.send({ status: data ? true : false, data });
 });
 
 

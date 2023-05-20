@@ -57,7 +57,7 @@ app.get("/twitter/extract-keywords", (req, res) => __awaiter(void 0, void 0, voi
         res.send({ status: false, message: 'No keyword param provided' });
     }
     const data = yield twitterKeywordsExtractorMainController.extractKeyword(keyword);
-    res.send({ status: true, data });
+    res.send({ status: data ? true : false, data });
 }));
 app.get("/twitter/extract-influencers/extract", (req, res) => {
     twitterExtractorMainController.fetchByRandomCategory();

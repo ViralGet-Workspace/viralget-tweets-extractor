@@ -14,10 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("../Utils/helpers");
 const TwitterService_1 = __importDefault(require("../Services/TwitterService"));
-const TweetRepository_1 = __importDefault(require("../models/TweetRepository"));
-const MetricsRepository_1 = __importDefault(require("../models/MetricsRepository"));
-const CategoryRepository_1 = __importDefault(require("../models/CategoryRepository"));
-const InfluencerRepository_1 = __importDefault(require("../models/InfluencerRepository"));
 const LoggerHelper_1 = __importDefault(require("../Helpers/LoggerHelper"));
 const TwitterKeywordsMetricsExtractor_1 = __importDefault(require("../Helpers/TwitterKeywordsMetricsExtractor"));
 const searchLocation = 'Nigeria';
@@ -26,22 +22,19 @@ keywords += "education summit, education, education strategist, business coach, 
 class TwitterKeywordsExtractorMainController {
     constructor() {
         this.runCount = 0;
-        this.minFollowersCount = 1000;
-        this.defaultGeocode = '9.0066472,3.3689801';
         this.twitterService = new TwitterService_1.default;
-        this.influencerRepository = new InfluencerRepository_1.default;
-        this.tweetRepository = new TweetRepository_1.default;
-        this.metricsRepository = new MetricsRepository_1.default;
-        this.categoryRepository = new CategoryRepository_1.default;
         this.logger = new LoggerHelper_1.default;
     }
     extractKeyword(keyword) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.fetchByKeyword(keyword);
-                if (!data) {
-                    throw new Error("No tweet found");
+                if (!data || !((_a = data === null || data === void 0 ? void 0 : data.tweets) === null || _a === void 0 ? void 0 : _a.length)) {
+                    this.logger.debug('No tweets found');
+                    return false;
                 }
+                console.log({ data });
                 // this.logger.debug({ tweets: data.length, })
                 let metricsExtractor = new TwitterKeywordsMetricsExtractor_1.default(data);
                 const extractedData = yield metricsExtractor.extract();
@@ -111,26 +104,28 @@ class TwitterKeywordsExtractorMainController {
             }
             catch (e) {
                 this.logger.debug('An error occured' + e.message + e.stack);
-                return [];
+                return false;
             }
         });
     }
     fetchByKeyword(keyword, data = {}, next_token = null) {
-        var _a, _b, _c;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             this.runCount += 1;
             const response = yield this.twitterService.fetchV2Tweets(keyword, next_token);
-            // this.logger.debug(JSON.stringify(response))
+            this.logger.debug('all data found ' + JSON.stringify(response.data.length));
             // console.log({ length: tweets.length, data: response.data })
-            if (!response || !response.data || !((_a = response === null || response === void 0 ? void 0 : response.meta) === null || _a === void 0 ? void 0 : _a.next_token) || this.runCount >= 2) {
+            // || !response?.meta?.next_token 
+            if (!response || !response.data || this.runCount >= 4) {
                 this.logger.debug('keyword: ' + keyword + ' No more results found.');
+                this.runCount = 0;
                 return data;
             }
             let { tweets = [], users = [], media = [] } = data;
             // console.log({ d: response.data });
             tweets = [...tweets, ...response.data];
-            users = [...users, ...(_b = response === null || response === void 0 ? void 0 : response.includes.users) !== null && _b !== void 0 ? _b : []];
-            media = [...media, ...(_c = response === null || response === void 0 ? void 0 : response.includes.media) !== null && _c !== void 0 ? _c : []];
+            users = [...users, ...(_a = response === null || response === void 0 ? void 0 : response.includes.users) !== null && _a !== void 0 ? _a : []];
+            media = [...media, ...(_b = response === null || response === void 0 ? void 0 : response.includes.media) !== null && _b !== void 0 ? _b : []];
             data = { tweets, users, media };
             this.logger.debug(`Run count: ${this.runCount}. Tweets count: ${data.tweets.length}`);
             yield (0, helpers_1.sleep)();
