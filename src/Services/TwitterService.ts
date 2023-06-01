@@ -62,7 +62,7 @@ export default class TwitterService {
             let url = this.baseURLV2 + `tweets/search/recent`;
 
             let params: any = {
-                'query': keyword,
+                'query': keyword + " -is:retweet",
                 'max_results': 100,
                 // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
                 'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',

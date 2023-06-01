@@ -29,8 +29,8 @@ export default class TwitterKeywordsMetricsExtractor {
             text_tweets: this.getTotalTextTweetsCount(),
             no_of_contributors: this.users.length,
             original_contributors: this.getOriginalContributors()?.length,
-            average_tweet_per_contributor: this.getAverageTweetPerContributor(),
-            average_follower_per_contributor: this.getAverageFollowerPerContributor(),
+            average_tweet_per_contributor: this.getAverageTweetPerContributor().toFixed(0),
+            average_follower_per_contributor: this.getAverageFollowerPerContributor().toFixed(0),
             top_contributors: this.getTopContributors(),
             best_performing_contributors: this.getBestPerformingContributors(),
             most_active: this.getMostActiveContributors(),
@@ -305,14 +305,9 @@ export default class TwitterKeywordsMetricsExtractor {
     getOriginalContributors() {
         const filtered_tweets = this.tweets?.filter((tweet: any) => !tweet.referenced_tweets);
 
-        let data = filtered_tweets.map((tweet: any) => ({
-            user: this.users[tweet.author_id],
-            tweet: this.formatTweet(tweet),
-        }));
+        let data = this.getContributors(filtered_tweets);
 
         data = data.sort((a: any, b: any) => a.user?.public_metrics?.tweet_count < b.user?.public_metrics?.tweet_count);
-        // data.map((tweet:any) => )
-
 
         return data;
     }
@@ -343,26 +338,65 @@ export default class TwitterKeywordsMetricsExtractor {
     }
 
     getTopContributors() {
-        return []
-        // let contributors = this.getOriginalContributors();
 
-        // return contributors?.slice(0, 5);
+        let contributors = this.getContributors(this.tweets);
+
+
+        contributors = contributors.sort((a: any, b: any) => a.tweets_count < b.tweets_count);
+
+        return contributors?.slice(0, 5);
+    }
+
+
+    getContributors(tweets: any) {
+        const data = tweets.map((tweet: any) => {
+
+            const user_tweets = this.users?.filter((user: any) => user.id == tweet.author_id);
+
+            let _data = {
+                user: user_tweets[0],
+                tweets_count: user_tweets.length
+            }
+
+            return _data;
+        });
+
+        return data
+
     }
 
     getBestPerformingContributors() {
-        return []
+        let data = this.getContributors(this.tweets);
+
+        data = data.sort((a: any, b: any) => a.user?.public_metrics?.impressions < b.user?.public_metrics?.impressions);
+
+        return data?.slice(0, 5);
     }
 
     getMostActiveContributors() {
-        return []
+        let data = this.getContributors(this.tweets);
+
+        data = data.sort((a: any, b: any) => a.user?.public_metrics?.like_count < b.user?.public_metrics?.like_count);
+
+        return data?.slice(0, 5);
     }
 
     getTopOriginalTweetsContributors() {
-        return []
+        const filtered_tweets = this.tweets?.filter((tweet: any) => !tweet.referenced_tweets);
+
+        let data = this.getContributors(filtered_tweets);
+
+        return data?.slice(0, 5);
     }
 
     getTopRetweeters() {
-        return [];
+
+        // Possobly fetch fresh data for this
+        const filtered_tweets = this.tweets?.filter((tweet: any) => tweet.referenced_tweets);
+
+        let data = this.getContributors(filtered_tweets);
+
+        return data?.slice(0, 5);
     }
 
     getTweetsCount() {

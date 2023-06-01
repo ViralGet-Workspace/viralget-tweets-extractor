@@ -33,8 +33,8 @@ class TwitterKeywordsMetricsExtractor {
                 text_tweets: this.getTotalTextTweetsCount(),
                 no_of_contributors: this.users.length,
                 original_contributors: (_d = this.getOriginalContributors()) === null || _d === void 0 ? void 0 : _d.length,
-                average_tweet_per_contributor: this.getAverageTweetPerContributor(),
-                average_follower_per_contributor: this.getAverageFollowerPerContributor(),
+                average_tweet_per_contributor: this.getAverageTweetPerContributor().toFixed(0),
+                average_follower_per_contributor: this.getAverageFollowerPerContributor().toFixed(0),
                 top_contributors: this.getTopContributors(),
                 best_performing_contributors: this.getBestPerformingContributors(),
                 most_active: this.getMostActiveContributors(),
@@ -257,12 +257,8 @@ class TwitterKeywordsMetricsExtractor {
     getOriginalContributors() {
         var _a;
         const filtered_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => !tweet.referenced_tweets);
-        let data = filtered_tweets.map((tweet) => ({
-            user: this.users[tweet.author_id],
-            tweet: this.formatTweet(tweet),
-        }));
+        let data = this.getContributors(filtered_tweets);
         data = data.sort((a, b) => { var _a, _b, _c, _d; return ((_b = (_a = a.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.tweet_count) < ((_d = (_c = b.user) === null || _c === void 0 ? void 0 : _c.public_metrics) === null || _d === void 0 ? void 0 : _d.tweet_count); });
-        // data.map((tweet:any) => )
         return data;
     }
     getRepliesToTweets() {
@@ -283,21 +279,44 @@ class TwitterKeywordsMetricsExtractor {
         return this.getTotalFollowersCount() / this.users.length;
     }
     getTopContributors() {
-        return [];
-        // let contributors = this.getOriginalContributors();
-        // return contributors?.slice(0, 5);
+        let contributors = this.getContributors(this.tweets);
+        contributors = contributors.sort((a, b) => a.tweets_count < b.tweets_count);
+        return contributors === null || contributors === void 0 ? void 0 : contributors.slice(0, 5);
+    }
+    getContributors(tweets) {
+        const data = tweets.map((tweet) => {
+            var _a;
+            const user_tweets = (_a = this.users) === null || _a === void 0 ? void 0 : _a.filter((user) => user.id == tweet.author_id);
+            let _data = {
+                user: user_tweets[0],
+                tweets_count: user_tweets.length
+            };
+            return _data;
+        });
+        return data;
     }
     getBestPerformingContributors() {
-        return [];
+        let data = this.getContributors(this.tweets);
+        data = data.sort((a, b) => { var _a, _b, _c, _d; return ((_b = (_a = a.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.impressions) < ((_d = (_c = b.user) === null || _c === void 0 ? void 0 : _c.public_metrics) === null || _d === void 0 ? void 0 : _d.impressions); });
+        return data === null || data === void 0 ? void 0 : data.slice(0, 5);
     }
     getMostActiveContributors() {
-        return [];
+        let data = this.getContributors(this.tweets);
+        data = data.sort((a, b) => { var _a, _b, _c, _d; return ((_b = (_a = a.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.like_count) < ((_d = (_c = b.user) === null || _c === void 0 ? void 0 : _c.public_metrics) === null || _d === void 0 ? void 0 : _d.like_count); });
+        return data === null || data === void 0 ? void 0 : data.slice(0, 5);
     }
     getTopOriginalTweetsContributors() {
-        return [];
+        var _a;
+        const filtered_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => !tweet.referenced_tweets);
+        let data = this.getContributors(filtered_tweets);
+        return data === null || data === void 0 ? void 0 : data.slice(0, 5);
     }
     getTopRetweeters() {
-        return [];
+        var _a;
+        // Possobly fetch fresh data for this
+        const filtered_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.referenced_tweets);
+        let data = this.getContributors(filtered_tweets);
+        return data === null || data === void 0 ? void 0 : data.slice(0, 5);
     }
     getTweetsCount() {
         return this.tweets.length;
