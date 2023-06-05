@@ -59,13 +59,21 @@ app.get("/twitter/extract-keywords", (req, res) => __awaiter(void 0, void 0, voi
     const data = yield twitterKeywordsExtractorMainController.extractKeyword(keyword);
     res.send({ status: data ? true : false, data });
 }));
+app.get("/twitter/recent-tweets", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username } = req.query;
+    if (!username) {
+        res.send({ status: false, message: 'No username param provided' });
+    }
+    const data = yield TwitterInfluencerExtractorMainController_js_1.default.getRecentTweets(username);
+    res.send({ status: data ? true : false, data });
+}));
 app.get("/twitter/extract-influencers/extract", (req, res) => {
     twitterExtractorMainController.fetchByRandomCategory();
     res.send('OK');
 });
-app.get("/twitter/extract-influencers/:categoryID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { categoryId } = req.params;
-    yield twitterExtractorMainController.fetchByCategory(categoryId);
+app.get("/twitter/extract-influencers", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { categoryID, geocode } = req.query;
+    yield twitterExtractorMainController.fetchByCategory(categoryID, geocode);
     res.send('OK');
 }));
 app.get("/twitter/keyword/:keyword", (req, res) => {

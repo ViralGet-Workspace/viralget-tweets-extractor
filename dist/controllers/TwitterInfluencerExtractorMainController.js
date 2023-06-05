@@ -27,7 +27,12 @@ class TwitterInfluencerExtractorMainController {
     constructor() {
         this.runCount = 0;
         this.minFollowersCount = 1000;
-        this.defaultGeocode = '9.0066472,3.3689801';
+        this.defaultGeocode = ''; //'9.0066472,3.3689801';
+        this.getRecentTweets = (username) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const data = yield this.twitterService.fetchUserTweets(username);
+            return (_a = data === null || data === void 0 ? void 0 : data.slice(0, 5)) === null || _a === void 0 ? void 0 : _a.map((tweet) => (0, helpers_1.formatTweet)(tweet));
+        });
         this.twitterService = new TwitterService_1.default;
         this.influencerRepository = new InfluencerRepository_1.default;
         this.tweetRepository = new TweetRepository_1.default;
@@ -48,9 +53,9 @@ class TwitterInfluencerExtractorMainController {
             }
         });
     }
-    fetchByKeyword(keyword, category, geocode = this.defaultGeocode) {
+    fetchByKeyword(keyword, category, geocode) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.handleFetchInfluencers(keyword, category, geocode, this.minFollowersCount);
+            const response = yield this.handleFetchInfluencers(keyword, category, geocode !== null && geocode !== void 0 ? geocode : this.defaultGeocode, this.minFollowersCount);
             if (!response) {
                 this.logger.debug('keyword: ' + keyword + ' No results found.');
             }
@@ -72,11 +77,11 @@ class TwitterInfluencerExtractorMainController {
             return response;
         });
     }
-    handleFetchInfluencers(keyword, category, geocode = '9.0820,8.6753', minFollowersCount = 1000, nextResultsUrl) {
+    handleFetchInfluencers(keyword, category, geocode, minFollowersCount = 1000, nextResultsUrl) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('Keyword: ', keyword, 'runcount:', this.runCount);
-            const response = yield this.twitterService.fetchTweets(keyword, geocode, nextResultsUrl);
+            const response = yield this.twitterService.fetchTweets(keyword, geocode !== null && geocode !== void 0 ? geocode : this.defaultGeocode, nextResultsUrl);
             // console.log({ response });
             // Store in DB after filter
             if (!response.statuses || !response.statuses.length) {
@@ -122,9 +127,17 @@ class TwitterInfluencerExtractorMainController {
                 if (!influencer || !influencerTweets) {
                     throw new Error('Cannot process user metrics');
                 }
-                console.log(influencerTweets);
+                // console.log(influencerTweets);
                 let metricsExtractor = new TwitterInfluencerMetricsExtractor_1.default(influencer, influencerTweets);
+                // console.log({ influencerTweets: influencerTweets.length })
+                // let data = {
+                //     tweets: influencerTweets,
+                //     users: [influencer],
+                //     media: [],
+                // }
+                // let keywordExtractor = new TwitterKeywordsMetricsExtractor(data);
                 let extractedData = yield metricsExtractor.extract();
+                // let additionalData = await keywordExtractor.extract();
                 yield this.metricsRepository.store(Object.assign({ influencer_id: influencerId }, extractedData));
                 yield this.influencerRepository.update(influencerId, ['tweets_count'], [extractedData === null || extractedData === void 0 ? void 0 : extractedData.tweets_count]);
             }

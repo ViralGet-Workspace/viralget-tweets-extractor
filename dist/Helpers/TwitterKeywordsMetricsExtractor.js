@@ -124,7 +124,7 @@ class TwitterKeywordsMetricsExtractor {
         return this.tweets.length - this.getTotalLinkTweetsCount();
     }
     getCampaignValue() {
-        return 0;
+        return this.getTotalImpressionCount() * 500;
     }
     getTotalImpressionCount() {
         var _a;

@@ -69,7 +69,7 @@ export default class TwitterKeywordsExtractorMainController {
                     value: extractedData.engagements,
                     growth: 0
                 },
-                campaign_score: {
+                campaign_value: {
                     value: extractedData.campaign_value,
                     growth: 0
                 },

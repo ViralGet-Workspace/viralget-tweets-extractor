@@ -1,6 +1,6 @@
 // import { runCode } from "..";
 import Db from "../Utils/db";
-import { sleep } from "../Utils/helpers";
+import { formatTweet, sleep } from "../Utils/helpers";
 import TwitterService from "../Services/TwitterService";
 import TwitterInfluencerMetricsExtractor from "../Helpers/TwitterInfluencerMetricsExtractor";
 import TweetRepository from "../models/TweetRepository";
@@ -27,7 +27,7 @@ export default class TwitterInfluencerExtractorMainController {
     private categoryRepository;
     private runCount: number = 0;
     private minFollowersCount: number = 1000;
-    private defaultGeocode: string = '9.0066472,3.3689801';
+    private defaultGeocode: string = '';//'9.0066472,3.3689801';
 
     constructor() {
         this.twitterService = new TwitterService;
@@ -55,8 +55,8 @@ export default class TwitterInfluencerExtractorMainController {
         }
     }
 
-    async fetchByKeyword(keyword: string, category: string, geocode: string = this.defaultGeocode) {
-        const response = await this.handleFetchInfluencers(keyword, category, geocode, this.minFollowersCount);
+    async fetchByKeyword(keyword: string, category: string, geocode: string) {
+        const response = await this.handleFetchInfluencers(keyword, category, geocode ?? this.defaultGeocode, this.minFollowersCount);
 
         if (!response) {
             this.logger.debug('keyword: ' + keyword + ' No results found.');
@@ -86,11 +86,11 @@ export default class TwitterInfluencerExtractorMainController {
     }
 
 
-    async handleFetchInfluencers(keyword: string, category: any, geocode: string = '9.0820,8.6753', minFollowersCount: number = 1000, nextResultsUrl?: string) {
+    async handleFetchInfluencers(keyword: string, category: any, geocode: string, minFollowersCount: number = 1000, nextResultsUrl?: string) {
 
         console.log('Keyword: ', keyword, 'runcount:', this.runCount);
 
-        const response = await this.twitterService.fetchTweets(keyword, geocode, nextResultsUrl,);
+        const response = await this.twitterService.fetchTweets(keyword, geocode ?? this.defaultGeocode, nextResultsUrl,);
 
         // console.log({ response });
         // Store in DB after filter
@@ -147,11 +147,21 @@ export default class TwitterInfluencerExtractorMainController {
                 throw new Error('Cannot process user metrics');
             }
 
-            console.log(influencerTweets);
+            // console.log(influencerTweets);
 
             let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets);
 
+            // console.log({ influencerTweets: influencerTweets.length })
+            // let data = {
+            //     tweets: influencerTweets,
+            //     users: [influencer],
+            //     media: [],
+            // }
+            // let keywordExtractor = new TwitterKeywordsMetricsExtractor(data);
+
             let extractedData = await metricsExtractor.extract();
+
+            // let additionalData = await keywordExtractor.extract();
 
             await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
 
@@ -252,6 +262,12 @@ export default class TwitterInfluencerExtractorMainController {
             });
 
         }
+    }
+
+    getRecentTweets = async (username: string) => {
+        const data = await this.twitterService.fetchUserTweets(username)
+
+        return data?.slice(0, 5)?.map((tweet: any) => formatTweet(tweet));
     }
 
     // async handleFetchinfluencerTweets(username: string) {

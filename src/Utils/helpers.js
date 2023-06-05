@@ -92,3 +92,14 @@ export const generateQueryUrl = (url, params) => {
 
     return url;
 }
+
+export const formatTweet = (tweet) => {
+    // console.log({ tweet })
+    return {
+        text: tweet.text,
+        created_at: formatDate(tweet.created_at),
+        replies: tweet.public_metrics?.reply_count,
+        quotes: tweet.public_metrics?.quote_count,
+        likes: tweet.public_metrics?.like_count,
+    }
+}

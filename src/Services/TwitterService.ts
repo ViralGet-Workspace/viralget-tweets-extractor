@@ -2,6 +2,18 @@ import { Client } from "twitter-api-sdk";
 import API from "../Utils/api";
 import { generateQueryUrl } from "../Utils/helpers";
 
+
+const tweet_params = {
+    'max_results': 100,
+    // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
+    'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
+    'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
+    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+    'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
+    'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
+    'poll.fields': 'options',
+}
+
 export default class TwitterService {
 
     private client;
@@ -63,14 +75,7 @@ export default class TwitterService {
 
             let params: any = {
                 'query': keyword + " -is:retweet",
-                'max_results': 100,
-                // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
-                'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
-                'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
-                'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
-                'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
-                'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
-                'poll.fields': 'options',
+                ...tweet_params
                 // 'exclude': 'retweets,replies',
             }
 
@@ -135,4 +140,34 @@ export default class TwitterService {
 
         return await this.api.get(url, true);
     }
+
+    async fetchV2TweetQuotes(tweetId: string, next_token: string) {
+        let url = this.baseURLV2 + `tweets/${tweetId}/quote_tweets`;
+
+        let params: any = tweet_params;
+
+        if (next_token) {
+            params += {
+                pagination_token: next_token
+            }
+        }
+
+
+        return await this.api.get(generateQueryUrl(url, params), true);
+    }
+
+    async fetchV2TweetLikes(tweetId: string, next_token: string) {
+        let url = this.baseURLV2 + `tweets/${tweetId}/liking_users`;
+
+        let params: any = tweet_params;
+
+        if (next_token) {
+            params += {
+                pagination_token: next_token
+            }
+        }
+
+        return await this.api.get(generateQueryUrl(url, params), true);
+    }
+
 }

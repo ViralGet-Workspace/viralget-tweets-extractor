@@ -176,7 +176,12 @@ export default class TwitterInfluencerMetricsExtractor {
 
     // TODO
     getQualityAudience() {
-        return 0;
+        // Check through user's followers.
+
+        // one with most likes and comments and retweets amongt influcers' tweets
+
+        return this.getTotalInteractions() / 4;
+        // return 0;
     }
 
     getEngagementRate() {

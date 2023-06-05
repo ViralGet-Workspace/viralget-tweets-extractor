@@ -132,7 +132,7 @@ export default class TwitterKeywordsMetricsExtractor {
     }
 
     getCampaignValue() {
-        return 0;
+        return this.getTotalImpressionCount() * 500;
     }
 
 

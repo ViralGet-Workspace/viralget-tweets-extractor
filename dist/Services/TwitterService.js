@@ -15,6 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const twitter_api_sdk_1 = require("twitter-api-sdk");
 const api_1 = __importDefault(require("../Utils/api"));
 const helpers_1 = require("../Utils/helpers");
+const tweet_params = {
+    'max_results': 100,
+    // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
+    'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
+    'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
+    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+    'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
+    'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
+    'poll.fields': 'options',
+};
 class TwitterService {
     constructor() {
         this.client = new twitter_api_sdk_1.Client(process.env.TWITTER_BEARER_TOKEN);
@@ -55,18 +65,9 @@ class TwitterService {
             // console.log({ userId })
             try {
                 let url = this.baseURLV2 + `tweets/search/recent`;
-                let params = {
-                    'query': keyword + " -is:retweet",
-                    'max_results': 100,
-                    // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
-                    'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
-                    'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
-                    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
-                    'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
-                    'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
-                    'poll.fields': 'options',
-                    // 'exclude': 'retweets,replies',
-                };
+                let params = Object.assign({ 'query': keyword + " -is:retweet" }, tweet_params
+                // 'exclude': 'retweets,replies',
+                );
                 if (next_token) {
                     params.next_token = next_token;
                 }
@@ -123,6 +124,30 @@ class TwitterService {
             let url = this.baseURLV2 + `users/${userId}`;
             url += '?user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld';
             return yield this.api.get(url, true);
+        });
+    }
+    fetchV2TweetQuotes(tweetId, next_token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = this.baseURLV2 + `tweets/${tweetId}/quote_tweets`;
+            let params = tweet_params;
+            if (next_token) {
+                params += {
+                    pagination_token: next_token
+                };
+            }
+            return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+        });
+    }
+    fetchV2TweetLikes(tweetId, next_token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = this.baseURLV2 + `tweets/${tweetId}/liking_users`;
+            let params = tweet_params;
+            if (next_token) {
+                params += {
+                    pagination_token: next_token
+                };
+            }
+            return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
         });
     }
 }

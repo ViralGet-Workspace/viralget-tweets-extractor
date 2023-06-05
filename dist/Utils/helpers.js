@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateQueryUrl = exports.sleep = exports.getBase64 = exports.nairaSymbol = exports.formatMailTo = exports.redirectTo = exports.isMobile = exports.nFormatter = exports.numberFormat = exports.encodeHTMLEntities = exports.formatDate = exports.getFieldValue = exports.getEventValue = exports.generateSlug = exports.classNames = void 0;
+exports.formatTweet = exports.generateQueryUrl = exports.sleep = exports.getBase64 = exports.nairaSymbol = exports.formatMailTo = exports.redirectTo = exports.isMobile = exports.nFormatter = exports.numberFormat = exports.encodeHTMLEntities = exports.formatDate = exports.getFieldValue = exports.getEventValue = exports.generateSlug = exports.classNames = void 0;
 const moment_1 = __importDefault(require("moment"));
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -99,4 +99,16 @@ const generateQueryUrl = (url, params) => {
     return url;
 };
 exports.generateQueryUrl = generateQueryUrl;
+const formatTweet = (tweet) => {
+    var _a, _b, _c;
+    // console.log({ tweet })
+    return {
+        text: tweet.text,
+        created_at: formatDate(tweet.created_at),
+        replies: (_a = tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.reply_count,
+        quotes: (_b = tweet.public_metrics) === null || _b === void 0 ? void 0 : _b.quote_count,
+        likes: (_c = tweet.public_metrics) === null || _c === void 0 ? void 0 : _c.like_count,
+    };
+};
+exports.formatTweet = formatTweet;
 //# sourceMappingURL=helpers.js.map
