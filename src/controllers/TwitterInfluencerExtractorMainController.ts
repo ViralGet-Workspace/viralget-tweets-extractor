@@ -152,20 +152,64 @@ export default class TwitterInfluencerExtractorMainController {
             let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets);
 
             // console.log({ influencerTweets: influencerTweets.length })
-            // let data = {
-            //     tweets: influencerTweets,
-            //     users: [influencer],
-            //     media: [],
-            // }
-            // let keywordExtractor = new TwitterKeywordsMetricsExtractor(data);
+            let data = {
+                tweets: influencerTweets,
+                users: [influencer],
+                media: [],
+            }
+            let keywordExtractor = new TwitterKeywordsMetricsExtractor(data);
 
             let extractedData = await metricsExtractor.extract();
 
-            // let additionalData = await keywordExtractor.extract();
+            let additionalData = await keywordExtractor.extract();
 
-            await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
+            const {
+                engagement_rate,
+                average_impressions,
+                total_interactions,
+                reach,
+                reachablility,
+                quality_audience_score,
+                brand_safety_level,
+                impressions_count,
+                authentic_engagement,
+                total_tweets,
+                total_likes,
+                total_replies,
+                total_retweets,
+                media_value,
+                average_cpe,
+                average_cpm,
+                best_performing_tweets,
+                most_used_hashtags } = extractedData;
 
-            await this.influencerRepository.update(influencerId, ['tweets_count'], [extractedData?.tweets_count]);
+
+            // await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
+
+            // await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
+
+            await this.influencerRepository.update(influencerId, [
+                'influencer_id', 'platform_id', 'engagement_rate', 'average_impressions', 'impressions', 'interactions', 'reach', 'reachability', 'quality_audience', 'authentic_engagement', 'brand_safety_level', 'total_tweets', 'total_likes', 'total_replies', 'total_retweets', 'media_value', 'average_cpe', 'average_cpm', 'best_performing_tweets', 'most_used_hashtags', 'tweets_count'],
+                [extractedData?.tweets_count,
+                    engagement_rate,
+                    average_impressions,
+                    total_interactions,
+                    reach,
+                    reachablility,
+                    quality_audience_score,
+                    brand_safety_level,
+                    impressions_count,
+                    authentic_engagement,
+                    total_tweets,
+                    total_likes,
+                    total_replies,
+                    total_retweets,
+                    media_value,
+                    average_cpe,
+                    average_cpm,
+                    best_performing_tweets,
+                    most_used_hashtags,
+                JSON.stringify(additionalData)]);
 
         } catch (e) {
             console.log({ e })

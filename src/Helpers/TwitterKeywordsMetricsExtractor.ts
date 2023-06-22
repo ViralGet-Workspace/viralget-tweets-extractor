@@ -235,7 +235,7 @@ export default class TwitterKeywordsMetricsExtractor {
     }
 
     getQualityAudienceScore() {
-        return ((this.getEngagementRate() * this.getQualityAudience()) / this.getTotalInteractions()) * 100;
+        return 0; // ((this.getEngagementRate() * this.getQualityAudience()) / this.getTotalInteractions()) * 100;
     }
 
     getMostUsedHashtags() {

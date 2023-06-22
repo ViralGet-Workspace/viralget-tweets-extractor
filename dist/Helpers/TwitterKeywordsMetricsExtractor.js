@@ -201,7 +201,7 @@ class TwitterKeywordsMetricsExtractor {
         return this.getTotalImpressionCount() / this.getTotalFetchedTweets();
     }
     getQualityAudienceScore() {
-        return ((this.getEngagementRate() * this.getQualityAudience()) / this.getTotalInteractions()) * 100;
+        return 0; // ((this.getEngagementRate() * this.getQualityAudience()) / this.getTotalInteractions()) * 100;
     }
     getMostUsedHashtags() {
         let hashtags = this.getTweetsHashtags();
