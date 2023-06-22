@@ -1,12 +1,12 @@
 import MetricsRepository from "../models/MetricsRepository";
-import { numberFormat } from "../Utils/helpers";
+import { formatDate, numberFormat } from "../Utils/helpers";
 
 export default class TwitterInfluencerMetricsExtractor {
 
     private user: any;
     private tweets: any;
 
-    constructor(user: any, tweets: any) {
+    constructor(user: any, tweets: any[]) {
         // this.user = user.data;
         this.user = user;
         this.tweets = tweets;
@@ -45,28 +45,28 @@ export default class TwitterInfluencerMetricsExtractor {
 
 
     getTotalFetchedTweets() {
-        return this.tweets?.data?.length ?? 0;
+        return this.tweets?.length ?? 0;
     }
 
     getFollowersCount() {
-        return this.user?.followers_count ?? 0;
-        // return this.user?.public_metrics?.followers_count;
+        // return this.user?.followers_count ?? 0;
+        return this.user?.public_metrics?.followers_count;
     }
 
     getFollowingCount() {
-        return this.user?.friends_count ?? 0;
-        // return this.user?.public_metrics?.following_count;
+        // return this.user?.friends_count ?? 0;
+        return this.user?.public_metrics?.following_count;
     }
 
     getTweetsCount() {
-        return this.user?.statuses_count ?? 0;
-        // return this.user?.public_metrics?.tweet_count;
+        // return this.user?.statuses_count ?? 0;
+        return this.user?.public_metrics?.tweet_count;
     }
 
     getTotalLikesCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.like_count ?? 0;
         });
 
@@ -76,7 +76,7 @@ export default class TwitterInfluencerMetricsExtractor {
     getTotalRetweetCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.retweet_count ?? 0;
         });
 
@@ -86,7 +86,7 @@ export default class TwitterInfluencerMetricsExtractor {
     getTotalReplyCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.reply_count ?? 0;
         });
 
@@ -96,7 +96,7 @@ export default class TwitterInfluencerMetricsExtractor {
     getTotalQuoteCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.quote_count ?? 0;
         });
 
@@ -106,7 +106,7 @@ export default class TwitterInfluencerMetricsExtractor {
     getTotalImpressionCount() {
         let sum = 0;
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             sum += tweet?.public_metrics?.impression_count ?? 0;
         });
 
@@ -114,13 +114,13 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     // getLinksClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
 
     //     return sum;
     // }
 
     // getProfileLinkClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
 
     //     return sum;
     // }
@@ -154,7 +154,7 @@ export default class TwitterInfluencerMetricsExtractor {
 
 
     getBrandSafetyLevel() {
-        let sensitive_tweets = this.tweets?.data?.filter((tweet: any) => tweet.possibly_sensitive);
+        let sensitive_tweets = this.tweets?.filter((tweet: any) => tweet.possibly_sensitive);
 
 
         let tweets_count = this.getTotalFetchedTweets();
@@ -216,7 +216,7 @@ export default class TwitterInfluencerMetricsExtractor {
     getTweetsHashtags() {
         const hashtags: any = {};
 
-        this.tweets?.data?.forEach((tweet: any) => {
+        this.tweets?.forEach((tweet: any) => {
             tweet.entities?.hashtags?.forEach((hashtag: any) => {
                 let tag = hashtag?.tag;
 
@@ -234,9 +234,9 @@ export default class TwitterInfluencerMetricsExtractor {
     }
 
     getBestPerformingTweets() {
-        let tweets = this.tweets.data?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
+        let tweets = this.tweets?.sort((a: any, b: any) => a.public_metrics?.impression_count < b.public_metrics?.impression_count);
 
-        return tweets?.slice(0, 5);
+        return tweets?.slice(0, 5).map((tweet: any) => this.formatTweet(tweet));
     }
 
     getMediaValue() {
@@ -249,5 +249,16 @@ export default class TwitterInfluencerMetricsExtractor {
 
     getAverageCPM() {
         return (this.getMediaValue() / this.getTotalImpressionCount()) * 1000;
+    }
+
+    formatTweet(tweet: any) {
+        // console.log({ tweet })
+        return {
+            text: tweet.text,
+            created_at: formatDate(tweet.created_at),
+            replies: tweet.public_metrics?.reply_count,
+            quotes: tweet.public_metrics?.quote_count,
+            likes: tweet.public_metrics?.like_count,
+        }
     }
 }

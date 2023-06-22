@@ -1,6 +1,9 @@
 import { Client } from "twitter-api-sdk";
 import API from "../Utils/api";
 import { generateQueryUrl } from "../Utils/helpers";
+import sampleTweets from '../dump/sample_tweets_data.json'
+
+const user_fields = 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld';
 
 
 const tweet_params = {
@@ -8,7 +11,7 @@ const tweet_params = {
     // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
     'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
     'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
-    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+    'user.fields': user_fields,
     'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
     'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
     'poll.fields': 'options',
@@ -40,6 +43,8 @@ export default class TwitterService {
         return await this.api.get(url, true);
     }
 
+
+
     async fetchTweets(keyword: string, geocode?: string, searchQuery?: string) {
 
         const baseUrl = `${this.baseURL}search/tweets.json`;
@@ -68,7 +73,26 @@ export default class TwitterService {
         return await this.api.get(url, true);
     }
 
-    async fetchV2Tweets(keyword: string, next_token: string | null = null) {
+
+    async fetchV2Followings(id: string) {
+
+        try {
+            let url = this.baseURLV2 + `users/{id}/followers`;
+
+            let params: any = {
+                'user.fields': user_fields,
+            }
+
+            return await this.api.get(generateQueryUrl(url, params), true);
+        } catch (e) {
+            console.log({ e })
+
+            return false;
+        }
+
+    }
+
+    async fetchV2Tweets(keyword: string, next_token: string | null = null): Promise<any> {
         // console.log({ userId })
         try {
             let url = this.baseURLV2 + `tweets/search/recent`;
@@ -83,7 +107,8 @@ export default class TwitterService {
                 params.next_token = next_token;
             }
 
-            return await this.api.get(generateQueryUrl(url, params), true);
+            return sampleTweets;
+            //            return await this.api.get(generateQueryUrl(url, params), true);
         } catch (e) {
             console.log({ e })
 
@@ -107,7 +132,8 @@ export default class TwitterService {
             return false;
         }
     }
-    async fetchV2UserTweets(userId: string) {
+
+    async fetchV2UserTweets(userId: string): Promise<any> {
         // console.log({ userId })
         try {
             let url = this.baseURLV2 + `users/${userId}/tweets`;
@@ -117,16 +143,17 @@ export default class TwitterService {
                 // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
                 'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
                 'expansions': 'attachments.media_keys,attachments.poll_ids',
-                'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+                'user.fields': user_fields,
                 'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
                 'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
                 'poll.fields': 'options',
                 'exclude': 'retweets,replies',
             }
 
-            return await this.api.get(generateQueryUrl(url, params), true);
+            return sampleTweets;
+            // return await this.api.get(generateQueryUrl(url, params), true);
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -151,7 +178,6 @@ export default class TwitterService {
                 pagination_token: next_token
             }
         }
-
 
         return await this.api.get(generateQueryUrl(url, params), true);
     }

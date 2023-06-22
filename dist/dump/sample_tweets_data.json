@@ -1,0 +1,1262 @@
+{
+    "data": [
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "46",
+                        "name": "Business Taxonomy",
+                        "description": "Categories within Brand Verticals that narrow down the scope of Brands"
+                    },
+                    "entity": {
+                        "id": "1557697439489880065",
+                        "name": "Travel & Transportation Business",
+                        "description": "Brands, companies, advertisers and every non-person handle with the profit intent related to travel as airlines, travel agencies, hotels"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "30",
+                        "name": "Entities [Entity Service]",
+                        "description": "Entity Service top level domain, every item that is in Entity Service should be in this domain"
+                    },
+                    "entity": {
+                        "id": "839159814991167489",
+                        "name": "Travel",
+                        "description": "Travel"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "66",
+                        "name": "Interests and Hobbies Category",
+                        "description": "A grouping of interests and hobbies entities, like Novelty Food or Destinations"
+                    },
+                    "entity": {
+                        "id": "864938653063159808",
+                        "name": "Hospitality",
+                        "description": "Hospitality"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "67",
+                        "name": "Interests and Hobbies",
+                        "description": "Interests, opinions, and behaviors of individuals, groups, or cultures; like Speciality Cooking or Theme Parks"
+                    },
+                    "entity": {
+                        "id": "864939492947275776",
+                        "name": "Hotel/Motel",
+                        "description": "Hotel/Motel"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "156",
+                        "name": "Cities",
+                        "description": "Cities around the world"
+                    },
+                    "entity": {
+                        "id": "907978531350519809",
+                        "name": "New York City",
+                        "description": "New York City"
+                    }
+                }
+            ],
+            "entities": {
+                "annotations": [
+                    {
+                        "start": 111,
+                        "end": 123,
+                        "probability": 0.984,
+                        "type": "Place",
+                        "normalized_text": "New York City"
+                    },
+                    {
+                        "start": 128,
+                        "end": 138,
+                        "probability": 0.6084,
+                        "type": "Organization",
+                        "normalized_text": "Prime Minis"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 19,
+                        "username": "TrueNorthCentre",
+                        "id": "3664109892"
+                    }
+                ]
+            },
+            "text": "RT @TrueNorthCentre: Documents show that taxpayers were billed $61,000 for hotel rooms during a recent trip to New York City by Prime Minis…",
+            "id": "1671858746560073732",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 466,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1242462220748873728",
+            "edit_history_tweet_ids": [
+                "1671858746560073732"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "10",
+                        "name": "Person",
+                        "description": "Named people in the world like Nelson Mandela"
+                    },
+                    "entity": {
+                        "id": "892804580878057472",
+                        "name": "Chuck Schumer",
+                        "description": "Senator Chuck Schumer (NY)"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "35",
+                        "name": "Politician",
+                        "description": "Politicians in the world, like Joe Biden"
+                    },
+                    "entity": {
+                        "id": "892804580878057472",
+                        "name": "Chuck Schumer",
+                        "description": "Senator Chuck Schumer (NY)"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "847878884917886977",
+                        "name": "Politics",
+                        "description": "Politics"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "892804580878057472",
+                        "name": "Chuck Schumer",
+                        "description": "Senator Chuck Schumer (NY)"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1070032753834438656",
+                        "name": "Political figures",
+                        "description": "Politician"
+                    }
+                }
+            ],
+            "entities": {
+                "annotations": [
+                    {
+                        "start": 46,
+                        "end": 48,
+                        "probability": 0.9647,
+                        "type": "Place",
+                        "normalized_text": "NYC"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 0,
+                        "end": 13,
+                        "username": "Mighty_Kenbo",
+                        "id": "40253966"
+                    },
+                    {
+                        "start": 14,
+                        "end": 26,
+                        "username": "Morning_Joe",
+                        "id": "254117355"
+                    },
+                    {
+                        "start": 27,
+                        "end": 38,
+                        "username": "SenSchumer",
+                        "id": "17494010"
+                    }
+                ],
+                "urls": [
+                    {
+                        "start": 51,
+                        "end": 74,
+                        "url": "https://t.co/eorkXxKwg1",
+                        "expanded_url": "https://twitter.com/surgicalrecons1/status/1671858739119259648/video/1",
+                        "display_url": "pic.twitter.com/eorkXxKwg1",
+                        "media_key": "7_1671858652439883776"
+                    }
+                ]
+            },
+            "attachments": {
+                "media_keys": [
+                    "7_1671858652439883776"
+                ]
+            },
+            "text": "@Mighty_Kenbo @Morning_Joe @SenSchumer BLM in NYC. https://t.co/eorkXxKwg1",
+            "id": "1671858739119259648",
+            "in_reply_to_user_id": "40253966",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 0,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1320701508279848961",
+            "edit_history_tweet_ids": [
+                "1671858739119259648"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "10",
+                        "name": "Person",
+                        "description": "Named people in the world like Nelson Mandela"
+                    },
+                    "entity": {
+                        "id": "10040395078",
+                        "name": "Joe Biden",
+                        "description": "US President Joe Biden"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "35",
+                        "name": "Politician",
+                        "description": "Politicians in the world, like Joe Biden"
+                    },
+                    "entity": {
+                        "id": "10040395078",
+                        "name": "Joe Biden",
+                        "description": "US President Joe Biden"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "10040395078",
+                        "name": "Joe Biden",
+                        "description": "US President Joe Biden"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "847878884917886977",
+                        "name": "Politics",
+                        "description": "Politics"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1070032753834438656",
+                        "name": "Political figures",
+                        "description": "Politician"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "10",
+                        "name": "Person",
+                        "description": "Named people in the world like Nelson Mandela"
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "35",
+                        "name": "Politician",
+                        "description": "Politicians in the world, like Joe Biden"
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1489542346047852544",
+                        "name": "India politics"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1518657363795845121",
+                        "name": "India political figures"
+                    }
+                }
+            ],
+            "entities": {
+                "hashtags": [
+                    {
+                        "start": 60,
+                        "end": 65,
+                        "tag": "Modi"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 19,
+                        "username": "FriedrichPieter",
+                        "id": "1047529714645004288"
+                    },
+                    {
+                        "start": 45,
+                        "end": 54,
+                        "username": "JoeBiden",
+                        "id": "939091"
+                    }
+                ]
+            },
+            "text": "RT @FriedrichPieter: Seen in NYC today. Hey, @JoeBiden, ask #Modi why he was banned from the USA from 2005-2014. \n\nHint: it’s because he’s…",
+            "id": "1671858711890128896",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 2242,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "750682699669450752",
+            "edit_history_tweet_ids": [
+                "1671858711890128896"
+            ]
+        },
+        {
+            "text": "RT @tomasz_swaczyna: Excited to announce my recent joining of the @psychedelic_nft community! It took me a while to discover this amazing p…",
+            "id": "1671858706831769602",
+            "possibly_sensitive": false,
+            "entities": {
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 19,
+                        "username": "tomasz_swaczyna",
+                        "id": "974654665764851713"
+                    },
+                    {
+                        "start": 66,
+                        "end": 82,
+                        "username": "psychedelic_nft",
+                        "id": "1434729911390855171"
+                    }
+                ]
+            },
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 9,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1463874162120790016",
+            "edit_history_tweet_ids": [
+                "1671858706831769602"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "46",
+                        "name": "Business Taxonomy",
+                        "description": "Categories within Brand Verticals that narrow down the scope of Brands"
+                    },
+                    "entity": {
+                        "id": "1557697439489880065",
+                        "name": "Travel & Transportation Business",
+                        "description": "Brands, companies, advertisers and every non-person handle with the profit intent related to travel as airlines, travel agencies, hotels"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "30",
+                        "name": "Entities [Entity Service]",
+                        "description": "Entity Service top level domain, every item that is in Entity Service should be in this domain"
+                    },
+                    "entity": {
+                        "id": "839159814991167489",
+                        "name": "Travel",
+                        "description": "Travel"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "66",
+                        "name": "Interests and Hobbies Category",
+                        "description": "A grouping of interests and hobbies entities, like Novelty Food or Destinations"
+                    },
+                    "entity": {
+                        "id": "864938653063159808",
+                        "name": "Hospitality",
+                        "description": "Hospitality"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "67",
+                        "name": "Interests and Hobbies",
+                        "description": "Interests, opinions, and behaviors of individuals, groups, or cultures; like Speciality Cooking or Theme Parks"
+                    },
+                    "entity": {
+                        "id": "864939492947275776",
+                        "name": "Hotel/Motel",
+                        "description": "Hotel/Motel"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "156",
+                        "name": "Cities",
+                        "description": "Cities around the world"
+                    },
+                    "entity": {
+                        "id": "907978531350519809",
+                        "name": "New York City",
+                        "description": "New York City"
+                    }
+                }
+            ],
+            "text": "RT @TrueNorthCentre: Documents show that taxpayers were billed $61,000 for hotel rooms during a recent trip to New York City by Prime Minis…",
+            "id": "1671858704227135489",
+            "possibly_sensitive": false,
+            "entities": {
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 19,
+                        "username": "TrueNorthCentre",
+                        "id": "3664109892"
+                    }
+                ]
+            },
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 466,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "894381348",
+            "edit_history_tweet_ids": [
+                "1671858704227135489"
+            ]
+        },
+        {
+            "entities": {
+                "annotations": [
+                    {
+                        "start": 43,
+                        "end": 45,
+                        "probability": 0.9458,
+                        "type": "Place",
+                        "normalized_text": "NYC"
+                    },
+                    {
+                        "start": 72,
+                        "end": 76,
+                        "probability": 0.9674,
+                        "type": "Person",
+                        "normalized_text": "Trump"
+                    },
+                    {
+                        "start": 135,
+                        "end": 145,
+                        "probability": 0.9653,
+                        "type": "Place",
+                        "normalized_text": "Trump Tower"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 0,
+                        "end": 14,
+                        "username": "patriotgirl44",
+                        "id": "3766315295"
+                    },
+                    {
+                        "start": 15,
+                        "end": 28,
+                        "username": "PalmerReport",
+                        "id": "15115280"
+                    }
+                ]
+            },
+            "text": "@patriotgirl44 @PalmerReport Umm. Longtime NYC residents knew all about Trump’s criminal activity, including which door to knock on in Trump Tower to get the good drugs.",
+            "id": "1671858688666083334",
+            "in_reply_to_user_id": "3766315295",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 0,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1525314814637182977",
+            "edit_history_tweet_ids": [
+                "1671858688666083334"
+            ]
+        },
+        {
+            "entities": {
+                "hashtags": [
+                    {
+                        "start": 100,
+                        "end": 113,
+                        "tag": "commentbelow"
+                    },
+                    {
+                        "start": 115,
+                        "end": 127,
+                        "tag": "bestdickpic"
+                    },
+                    {
+                        "start": 128,
+                        "end": 137,
+                        "tag": "bareback"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 12,
+                        "username": "A_mounds",
+                        "id": "887544505112682496"
+                    }
+                ]
+            },
+            "text": "RT @A_mounds: If u luv them long strokes, leave ur best 🍆 pic down below ⬇️ and show me what u got\n #commentbelow ##bestdickpic #bareback #…",
+            "id": "1671858681233784832",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 595,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1639976179594588160",
+            "edit_history_tweet_ids": [
+                "1671858681233784832"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "29",
+                        "name": "Events [Entity Service]",
+                        "description": "Real world events. "
+                    },
+                    "entity": {
+                        "id": "1286664537060433920",
+                        "name": "75th Session of the UN General Assembly"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "10",
+                        "name": "Person",
+                        "description": "Named people in the world like Nelson Mandela"
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "35",
+                        "name": "Politician",
+                        "description": "Politicians in the world, like Joe Biden"
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "806566669166350336",
+                        "name": "Narendra Modi",
+                        "description": "Prime Minister of India Narendra Modi"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1489542346047852544",
+                        "name": "India politics"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1518657363795845121",
+                        "name": "India political figures"
+                    }
+                }
+            ],
+            "entities": {
+                "annotations": [
+                    {
+                        "start": 67,
+                        "end": 79,
+                        "probability": 0.9522,
+                        "type": "Person",
+                        "normalized_text": "Narendra Modi"
+                    },
+                    {
+                        "start": 92,
+                        "end": 110,
+                        "probability": 0.7125,
+                        "type": "Organization",
+                        "normalized_text": "UN General Assembly"
+                    },
+                    {
+                        "start": 122,
+                        "end": 133,
+                        "probability": 0.8474,
+                        "type": "Person",
+                        "normalized_text": "Csaba Korosi"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 15,
+                        "username": "MaryMillben",
+                        "id": "187543159"
+                    }
+                ]
+            },
+            "text": "RT @MaryMillben: Such an honor to be with you today Prime Minister Narendra Modi, alongside UN General Assembly President Csaba Korosi, Ric…",
+            "id": "1671858680336367616",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 491,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "115008443",
+            "edit_history_tweet_ids": [
+                "1671858680336367616"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "10",
+                        "name": "Person",
+                        "description": "Named people in the world like Nelson Mandela"
+                    },
+                    "entity": {
+                        "id": "1455713631476142087",
+                        "name": "Eric Adams"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "35",
+                        "name": "Politician",
+                        "description": "Politicians in the world, like Joe Biden"
+                    },
+                    "entity": {
+                        "id": "1455713631476142087",
+                        "name": "Eric Adams"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "847878884917886977",
+                        "name": "Politics",
+                        "description": "Politics"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1455713631476142087",
+                        "name": "Eric Adams"
+                    }
+                }
+            ],
+            "entities": {
+                "annotations": [
+                    {
+                        "start": 17,
+                        "end": 27,
+                        "probability": 0.5871,
+                        "type": "Person",
+                        "normalized_text": "Mayor Adams"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 3,
+                        "end": 15,
+                        "username": "createcraig",
+                        "id": "186827703"
+                    }
+                ]
+            },
+            "text": "RT @createcraig: Mayor Adams unveiled his newest plan to prevent lithium-ion battery fires as the death toll from e-bike blazes has already…",
+            "id": "1671858680055185409",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 0,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1634499846",
+            "edit_history_tweet_ids": [
+                "1671858680055185409"
+            ]
+        },
+        {
+            "context_annotations": [
+                {
+                    "domain": {
+                        "id": "46",
+                        "name": "Business Taxonomy",
+                        "description": "Categories within Brand Verticals that narrow down the scope of Brands"
+                    },
+                    "entity": {
+                        "id": "1557696848252391426",
+                        "name": "Financial Services Business",
+                        "description": "Brands, companies, advertisers and every non-person handle with the profit intent related to Banks, Credit cards, Insurance, Investments, Stocks "
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1369311988040355840",
+                        "name": "NFTs",
+                        "description": "Non-fungible tokens"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1466061700394717189",
+                        "name": "Bored Ape Yacht Club"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1466072151526547457",
+                        "name": "NFT collections"
+                    }
+                },
+                {
+                    "domain": {
+                        "id": "131",
+                        "name": "Unified Twitter Taxonomy",
+                        "description": "A taxonomy of user interests. "
+                    },
+                    "entity": {
+                        "id": "1521271095176749056",
+                        "name": "Yuga Labs"
+                    }
+                }
+            ],
+            "entities": {
+                "hashtags": [
+                    {
+                        "start": 135,
+                        "end": 146,
+                        "tag": "PAfollowPA"
+                    }
+                ],
+                "mentions": [
+                    {
+                        "start": 0,
+                        "end": 16,
+                        "username": "tomasz_swaczyna",
+                        "id": "974654665764851713"
+                    },
+                    {
+                        "start": 17,
+                        "end": 33,
+                        "username": "psychedelic_nft",
+                        "id": "1434729911390855171"
+                    },
+                    {
+                        "start": 34,
+                        "end": 42,
+                        "username": "NFT_NYC",
+                        "id": "1057660949161684992"
+                    },
+                    {
+                        "start": 43,
+                        "end": 54,
+                        "username": "BoredApeYC",
+                        "id": "1381699264011771906"
+                    },
+                    {
+                        "start": 55,
+                        "end": 66,
+                        "username": "0xPhantom_",
+                        "id": "346063876"
+                    },
+                    {
+                        "start": 67,
+                        "end": 76,
+                        "username": "BAYC2745",
+                        "id": "1202724401528987648"
+                    },
+                    {
+                        "start": 77,
+                        "end": 88,
+                        "username": "metasy_art",
+                        "id": "1508731271119351808"
+                    }
+                ],
+                "urls": [
+                    {
+                        "start": 150,
+                        "end": 173,
+                        "url": "https://t.co/gxYJD1NeS3",
+                        "expanded_url": "https://twitter.com/WesMinton2/status/1671858674917097472/photo/1",
+                        "display_url": "pic.twitter.com/gxYJD1NeS3",
+                        "media_key": "3_1671858672748621826"
+                    }
+                ]
+            },
+            "attachments": {
+                "media_keys": [
+                    "3_1671858672748621826"
+                ]
+            },
+            "text": "@tomasz_swaczyna @psychedelic_nft @NFT_NYC @BoredApeYC @0xPhantom_ @BAYC2745 @metasy_art Welcome to the PA fam! Wonderful to have you! #PAfollowPA 🤝🤝 https://t.co/gxYJD1NeS3",
+            "id": "1671858674917097472",
+            "in_reply_to_user_id": "974654665764851713",
+            "possibly_sensitive": false,
+            "lang": "en",
+            "public_metrics": {
+                "retweet_count": 0,
+                "reply_count": 0,
+                "like_count": 0,
+                "quote_count": 0,
+                "bookmark_count": 0,
+                "impression_count": 0
+            },
+            "author_id": "1317372479183163392",
+            "edit_history_tweet_ids": [
+                "1671858674917097472"
+            ]
+        }
+    ],
+    "includes": {
+        "users": [
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 8,
+                    "following_count": 55,
+                    "tweet_count": 1383,
+                    "listed_count": 0
+                },
+                "id": "1242462220748873728",
+                "verified": false,
+                "description": "",
+                "created_at": "2020-03-24T14:44:22.000Z",
+                "username": "AF95762898",
+                "name": "AF",
+                "profile_image_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 120,
+                    "following_count": 206,
+                    "tweet_count": 8953,
+                    "listed_count": 7
+                },
+                "pinned_tweet_id": "1536700835052367874",
+                "id": "1320701508279848961",
+                "verified": false,
+                "description": "Fcuk Cancer",
+                "created_at": "2020-10-26T12:19:19.000Z",
+                "username": "surgicalrecons1",
+                "name": "surgical reconstruction",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1320703692824334336/mhMm_LAw_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 220,
+                    "following_count": 380,
+                    "tweet_count": 3009,
+                    "listed_count": 0
+                },
+                "id": "750682699669450752",
+                "verified": false,
+                "description": "",
+                "location": "Shimoga, India",
+                "created_at": "2016-07-06T13:27:57.000Z",
+                "username": "Cinemasharath",
+                "name": "Sharkassme..!",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1624815808689111040/NvXnaUsb_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 3952,
+                    "following_count": 4998,
+                    "tweet_count": 8778,
+                    "listed_count": 24
+                },
+                "id": "1463874162120790016",
+                "entities": {
+                    "description": {
+                        "mentions": [
+                            {
+                                "start": 53,
+                                "end": 69,
+                                "username": "psychedelic_nft"
+                            }
+                        ]
+                    }
+                },
+                "verified": true,
+                "description": "Finance Executive, Fitness/Wellness, Growth Mindset, @psychedelic_nft Shaman",
+                "location": "San Diego, CA",
+                "created_at": "2021-11-25T14:16:34.000Z",
+                "username": "InTheBlack_eth",
+                "name": "InTheBlack.eth | Nick",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1628585367959130113/mgmtx_Kh_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 1608,
+                    "following_count": 1948,
+                    "tweet_count": 224427,
+                    "listed_count": 21
+                },
+                "pinned_tweet_id": "1580080946413711360",
+                "id": "894381348",
+                "verified": false,
+                "description": "unemployed rapporteur",
+                "location": "West of Everything ",
+                "created_at": "2012-10-21T01:33:17.000Z",
+                "username": "MoleskiDorothy",
+                "name": "Oh Canada !",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1661053510748901377/hgXVSfoQ_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 149,
+                    "following_count": 518,
+                    "tweet_count": 6097,
+                    "listed_count": 1
+                },
+                "id": "1525314814637182977",
+                "verified": false,
+                "description": "Pilot. Opera Singer. Prolific writer. MakeUp Artist. Cat Lover. Single mom. Contagious laugh. Functions best in air conditioning. Can get political.",
+                "created_at": "2022-05-14T03:20:58.000Z",
+                "username": "SpicyShirley",
+                "name": "SpicyShirley",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1621696378794541056/SLlCFqQ5_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 37,
+                    "following_count": 30,
+                    "tweet_count": 268,
+                    "listed_count": 0
+                },
+                "id": "1639976179594588160",
+                "verified": false,
+                "description": "",
+                "created_at": "2023-03-26T13:02:55.000Z",
+                "username": "I4Saniro58396",
+                "name": "i4 saniro",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1639976222582099972/m5lFdjFe_normal.png"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 1035,
+                    "following_count": 621,
+                    "tweet_count": 18970,
+                    "listed_count": 5
+                },
+                "id": "115008443",
+                "verified": false,
+                "description": "Founded The Spiritual Vegetarian & Knowledge Whiteboard.\nInterest areas: Strategic Management of NGOs, Qualitative Research & Social Development.",
+                "location": "Mumbai, India",
+                "created_at": "2010-02-17T09:20:58.000Z",
+                "username": "rajshri_mahtani",
+                "name": "Rajshri Mahtani",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1554447773755383809/wDIaUqYu_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 16773,
+                    "following_count": 4602,
+                    "tweet_count": 34526,
+                    "listed_count": 317
+                },
+                "url": "https://t.co/ck1wLBg3Wt",
+                "pinned_tweet_id": "1360014580567728131",
+                "id": "1634499846",
+                "entities": {
+                    "url": {
+                        "urls": [
+                            {
+                                "start": 0,
+                                "end": 23,
+                                "url": "https://t.co/ck1wLBg3Wt",
+                                "expanded_url": "https://nypost.com/author/bernadette-hogan/",
+                                "display_url": "nypost.com/author/bernade…"
+                            }
+                        ]
+                    },
+                    "description": {
+                        "mentions": [
+                            {
+                                "start": 0,
+                                "end": 7,
+                                "username": "nypost"
+                            },
+                            {
+                                "start": 62,
+                                "end": 77,
+                                "username": "CapitalTonight"
+                            },
+                            {
+                                "start": 85,
+                                "end": 92,
+                                "username": "Marist"
+                            }
+                        ]
+                    }
+                },
+                "verified": false,
+                "description": "@nypost City Hall Bureau Chief | ex-NYP Albany Bureau Chief | @CapitalTonight alum | @Marist | RTs not endorsements, duh | Tips to bhogan@nypost.com | DM/Signal",
+                "location": "Albany, NY",
+                "created_at": "2013-07-31T04:01:08.000Z",
+                "username": "bern_hogan",
+                "name": "Bernadette Hogan",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1424421540817522692/BG7I9iYV_normal.jpg"
+            },
+            {
+                "protected": false,
+                "public_metrics": {
+                    "followers_count": 6121,
+                    "following_count": 5706,
+                    "tweet_count": 26841,
+                    "listed_count": 25
+                },
+                "pinned_tweet_id": "1636447597127958528",
+                "id": "1317372479183163392",
+                "entities": {
+                    "description": {
+                        "mentions": [
+                            {
+                                "start": 0,
+                                "end": 10,
+                                "username": "thepacnft"
+                            },
+                            {
+                                "start": 29,
+                                "end": 45,
+                                "username": "psychedelic_nft"
+                            },
+                            {
+                                "start": 61,
+                                "end": 75,
+                                "username": "killabearsnft"
+                            },
+                            {
+                                "start": 78,
+                                "end": 92,
+                                "username": "SappySealsNFT"
+                            },
+                            {
+                                "start": 95,
+                                "end": 108,
+                                "username": "ThePlagueNFT"
+                            },
+                            {
+                                "start": 111,
+                                "end": 120,
+                                "username": "Loti_nft"
+                            },
+                            {
+                                "start": 123,
+                                "end": 133,
+                                "username": "LILPUDGYS"
+                            }
+                        ]
+                    }
+                },
+                "verified": false,
+                "description": "@thepacnft Community Manager @psychedelic_nft Shaman 🧙\u200d♂️✨️\n\n@killabearsnft | @SappySealsNFT | @ThePlagueNFT | @Loti_nft | @LILPUDGYS |",
+                "location": "Omaha, NE",
+                "created_at": "2020-10-17T07:51:14.000Z",
+                "username": "WesMinton2",
+                "name": "dynopearl.eth",
+                "profile_image_url": "https://pbs.twimg.com/profile_images/1615001121994555393/7_NLSvNJ_normal.jpg"
+            }
+        ],
+        "media": [
+            {
+                "height": 480,
+                "preview_image_url": "https://pbs.twimg.com/ext_tw_video_thumb/1671858652439883776/pu/img/zSlHshN6rOQv-EIL.jpg",
+                "duration_ms": 140000,
+                "width": 854,
+                "media_key": "7_1671858652439883776",
+                "public_metrics": {
+                    "view_count": 0
+                },
+                "type": "video"
+            },
+            {
+                "height": 2024,
+                "url": "https://pbs.twimg.com/media/FzOimt_WcAIODfo.jpg",
+                "width": 2024,
+                "media_key": "3_1671858672748621826",
+                "type": "photo"
+            }
+        ]
+    },
+    "meta": {
+        "newest_id": "1671858746560073732",
+        "oldest_id": "1671858674917097472",
+        "result_count": 10,
+        "next_token": "b26v89c19zqg8o3fqklyf9ofo5cl3p34amb0vyqnndv99"
+    }
+}

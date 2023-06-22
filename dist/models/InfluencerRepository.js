@@ -59,12 +59,15 @@ class InfluencerRepository extends BaseRepository_1.default {
                     console.log('User exists', { username });
                 }
                 else {
-                    const { id_str, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at } = tweetUser;
+                    const { followers_count, following_count, tweet_count } = tweetUser === null || tweetUser === void 0 ? void 0 : tweetUser.public_metrics;
+                    const { id, username, name, location, description, verified, profile_image_url_https, profile_image_url, profile_banner_url, url, created_at } = tweetUser;
+                    // console.log({ id, username, location, searchLocation, description, protected: tweetUser.protected, followers_count, following_count, verified, profile_image_url, profile_banner_url, created_at, geocode });
                     // console.log({ id, screen_name, name, location, description, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url, url, created_at })
                     const query = {
                         text: `INSERT IGNORE INTO twitter_influencers SET twitter_id = ?, username = ?, full_name = ?, location = ?, bio = ?, is_protected = ?, followers_count = ?, following_count = ?, is_verified = ?,  profile_photo_url = ?, profile_banner_url = ?, account_created_on = ?, geocode = ?`,
-                        values: [id_str, screen_name, name, location !== null && location !== void 0 ? location : searchLocation, description, tweetUser.protected, followers_count, friends_count, verified, profile_image_url_https, profile_banner_url !== null && profile_banner_url !== void 0 ? profile_banner_url : profile_image_url_https, created_at, geocode],
+                        values: [id, username, name, location !== null && location !== void 0 ? location : searchLocation, description, tweetUser.protected, followers_count, following_count, verified, profile_image_url, profile_banner_url !== null && profile_banner_url !== void 0 ? profile_banner_url : profile_image_url, created_at, geocode],
                     };
+                    // console.log({ query })
                     const user = yield this.db.query(query);
                 }
                 return yield this.findByTwitterId(tweetUser.id);
@@ -77,8 +80,11 @@ class InfluencerRepository extends BaseRepository_1.default {
     update(userId, fields, values) {
         return __awaiter(this, void 0, void 0, function* () {
             let _fields = '';
-            fields.forEach(field => {
-                _fields += `${field} = ? `;
+            fields.forEach((field, index) => {
+                _fields += `${field} = ?`;
+                if (index != fields.length - 1) {
+                    _fields += ', ';
+                }
             });
             // console.log({ _fields, values })
             try {
@@ -86,6 +92,7 @@ class InfluencerRepository extends BaseRepository_1.default {
                     text: `UPDATE twitter_influencers SET ${_fields} WHERE id = ?`,
                     values: [...values, userId],
                 };
+                console.log({ query });
                 const result = yield this.db.query(query);
                 return result[0];
             }

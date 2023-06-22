@@ -76,6 +76,7 @@ export const getBase64 = (img, callback) => {
 
 export const sleep = async (seconds = 5000) => {
     return await new Promise(r => setTimeout(r, seconds));
+    // return await new Promise(r => setTimeout(r, seconds));
 }
 
 export const generateQueryUrl = (url, params) => {

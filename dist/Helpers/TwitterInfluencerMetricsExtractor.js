@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("../Utils/helpers");
 class TwitterInfluencerMetricsExtractor {
     constructor(user, tweets) {
         // this.user = user.data;
@@ -46,75 +47,75 @@ class TwitterInfluencerMetricsExtractor {
         });
     }
     getTotalFetchedTweets() {
-        var _a, _b, _c;
-        return (_c = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.length) !== null && _c !== void 0 ? _c : 0;
+        var _a, _b;
+        return (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
     }
     getFollowersCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.followers_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.followers_count;
+        // return this.user?.followers_count ?? 0;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.followers_count;
     }
     getFollowingCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.friends_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.following_count;
+        // return this.user?.friends_count ?? 0;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.following_count;
     }
     getTweetsCount() {
         var _a, _b;
-        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.statuses_count) !== null && _b !== void 0 ? _b : 0;
-        // return this.user?.public_metrics?.tweet_count;
+        // return this.user?.statuses_count ?? 0;
+        return (_b = (_a = this.user) === null || _a === void 0 ? void 0 : _a.public_metrics) === null || _b === void 0 ? void 0 : _b.tweet_count;
     }
     getTotalLikesCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.like_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalRetweetCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.retweet_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalReplyCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.reply_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalQuoteCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.quote_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     getTotalImpressionCount() {
-        var _a, _b;
+        var _a;
         let sum = 0;
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             sum += (_b = (_a = tweet === null || tweet === void 0 ? void 0 : tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) !== null && _b !== void 0 ? _b : 0;
         });
         return sum;
     }
     // getLinksClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.url_link_clicks + b.public_metrics?.url_link_clicks);
     //     return sum;
     // }
     // getProfileLinkClicksCount() {
-    //     const sum = this.tweets?.data?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
+    //     const sum = this.tweets?.reduce((a: any, b: any) => a.public_metrics?.user_profile_clicks + b.public_metrics?.user_profile_clicks);
     //     return sum;
     // }
     getTotalMediaViewsCount() {
@@ -140,8 +141,8 @@ class TwitterInfluencerMetricsExtractor {
         return sum;
     }
     getBrandSafetyLevel() {
-        var _a, _b;
-        let sensitive_tweets = (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.filter((tweet) => tweet.possibly_sensitive);
+        var _a;
+        let sensitive_tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.filter((tweet) => tweet.possibly_sensitive);
         let tweets_count = this.getTotalFetchedTweets();
         return (((sensitive_tweets === null || sensitive_tweets === void 0 ? void 0 : sensitive_tweets.length) / tweets_count) * 100) - 100;
     }
@@ -182,9 +183,9 @@ class TwitterInfluencerMetricsExtractor {
         return this.getReach() * 1000;
     }
     getTweetsHashtags() {
-        var _a, _b;
+        var _a;
         const hashtags = {};
-        (_b = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.forEach((tweet) => {
+        (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.forEach((tweet) => {
             var _a, _b;
             (_b = (_a = tweet.entities) === null || _a === void 0 ? void 0 : _a.hashtags) === null || _b === void 0 ? void 0 : _b.forEach((hashtag) => {
                 let tag = hashtag === null || hashtag === void 0 ? void 0 : hashtag.tag;
@@ -202,8 +203,8 @@ class TwitterInfluencerMetricsExtractor {
     }
     getBestPerformingTweets() {
         var _a;
-        let tweets = (_a = this.tweets.data) === null || _a === void 0 ? void 0 : _a.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });
-        return tweets === null || tweets === void 0 ? void 0 : tweets.slice(0, 5);
+        let tweets = (_a = this.tweets) === null || _a === void 0 ? void 0 : _a.sort((a, b) => { var _a, _b; return ((_a = a.public_metrics) === null || _a === void 0 ? void 0 : _a.impression_count) < ((_b = b.public_metrics) === null || _b === void 0 ? void 0 : _b.impression_count); });
+        return tweets === null || tweets === void 0 ? void 0 : tweets.slice(0, 5).map((tweet) => this.formatTweet(tweet));
     }
     getMediaValue() {
         return (this.getAverageImpressions() * 360) / 1000;
@@ -213,6 +214,17 @@ class TwitterInfluencerMetricsExtractor {
     }
     getAverageCPM() {
         return (this.getMediaValue() / this.getTotalImpressionCount()) * 1000;
+    }
+    formatTweet(tweet) {
+        var _a, _b, _c;
+        // console.log({ tweet })
+        return {
+            text: tweet.text,
+            created_at: (0, helpers_1.formatDate)(tweet.created_at),
+            replies: (_a = tweet.public_metrics) === null || _a === void 0 ? void 0 : _a.reply_count,
+            quotes: (_b = tweet.public_metrics) === null || _b === void 0 ? void 0 : _b.quote_count,
+            likes: (_c = tweet.public_metrics) === null || _c === void 0 ? void 0 : _c.like_count,
+        };
     }
 }
 exports.default = TwitterInfluencerMetricsExtractor;

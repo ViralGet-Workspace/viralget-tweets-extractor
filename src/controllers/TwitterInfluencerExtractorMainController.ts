@@ -27,7 +27,7 @@ export default class TwitterInfluencerExtractorMainController {
     private categoryRepository;
     private runCount: number = 0;
     private minFollowersCount: number = 1000;
-    private defaultGeocode: string = '';//'9.0066472,3.3689801';
+    private defaultGeocode: string = '0,0';//'9.0066472,3.3689801';
 
     constructor() {
         this.twitterService = new TwitterService;
@@ -66,7 +66,7 @@ export default class TwitterInfluencerExtractorMainController {
     }
 
 
-    async fetchByCategory(categoryId: number, geoCode: string = '') {
+    async fetchByCategory(categoryId: number, geoCode: string = this.defaultGeocode) {
         const categoryRepository = (new CategoryRepository)
         const keywordCategory = await categoryRepository.findKeywordCategoryByID(categoryId);
 
@@ -86,15 +86,15 @@ export default class TwitterInfluencerExtractorMainController {
     }
 
 
-    async handleFetchInfluencers(keyword: string, category: any, geocode: string, minFollowersCount: number = 1000, nextResultsUrl?: string) {
+    async handleFetchInfluencers(keyword: string, category: any, geocode: string, minFollowersCount: number = 1000, next_token?: string) {
 
         console.log('Keyword: ', keyword, 'runcount:', this.runCount);
 
-        const response = await this.twitterService.fetchTweets(keyword, geocode ?? this.defaultGeocode, nextResultsUrl,);
+        const response = await this.twitterService.fetchV2Tweets(keyword, next_token);
 
-        // console.log({ response });
+
         // Store in DB after filter
-        if (!response.statuses || !response.statuses.length) {
+        if (!response || !response.data) {
             console.log('No tweets found. Restart!!!')
 
             await sleep()
@@ -109,14 +109,12 @@ export default class TwitterInfluencerExtractorMainController {
         // }
 
         // console.log({response: response.statuses})
-        for (let i = 0; i <= response.statuses.length; i++) {
-            let tweet = response.statuses[i];
+        const users = response?.includes?.users;
+        for (let i = 0; i <= users.length; i++) {
+            let user = users[i];
             // console.log({ tweet })
 
-            if (tweet) {
-
-                const user = tweet.user;
-
+            if (user) {
                 await this.handleProcessInfluencerCheck(user, minFollowersCount, category, geocode);
                 // sleep(200000);
             }
@@ -125,12 +123,12 @@ export default class TwitterInfluencerExtractorMainController {
 
         await sleep(10000);
 
-        if (response.search_metadata?.next_results) {
+        if (response.meta?.next_token) {
             setTimeout(() => {
-                console.log('Continue to next page ======>>>> ', response.search_metadata?.next_result)
+                console.log('Continue to next page ======>>>> ', response.meta?.next_token)
                 // this.handleFetchInfluencers(keyword, category, geocode, response.search_metadata.next_results);
                 this.runCount++;
-                this.handleFetchInfluencers(keyword, category, geocode, minFollowersCount, response.search_metadata.next_results);
+                this.handleFetchInfluencers(keyword, category, geocode, minFollowersCount, response.meta?.next_token);
             }, 10000)
         } else {
             console.log('Terminated!!!')
@@ -143,23 +141,25 @@ export default class TwitterInfluencerExtractorMainController {
         // console.log('SEE ME HEREEEE', { influencer, influencerTweets })
 
         try {
-            if (!influencer || !influencerTweets) {
+            if (!influencer || !influencerTweets || !influencerTweets.data) {
                 throw new Error('Cannot process user metrics');
             }
 
-            // console.log(influencerTweets);
+            // console.log({ tweets: influencerTweets.data, user: influencer });
 
-            let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets);
+            let metricsExtractor = new TwitterInfluencerMetricsExtractor(influencer, influencerTweets.data);
 
             // console.log({ influencerTweets: influencerTweets.length })
             let data = {
-                tweets: influencerTweets,
+                tweets: influencerTweets.data,
                 users: [influencer],
-                media: [],
+                media: influencerTweets?.includes?.media ?? [],
             }
+
             let keywordExtractor = new TwitterKeywordsMetricsExtractor(data);
 
             let extractedData = await metricsExtractor.extract();
+            // console.log({ extractedData });
 
             let additionalData = await keywordExtractor.extract();
 
@@ -188,8 +188,8 @@ export default class TwitterInfluencerExtractorMainController {
 
             // await this.metricsRepository.store({ influencer_id: influencerId, ...extractedData });
 
-            await this.influencerRepository.update(influencerId, [
-                'influencer_id', 'platform_id', 'engagement_rate', 'average_impressions', 'impressions', 'interactions', 'reach', 'reachability', 'quality_audience', 'authentic_engagement', 'brand_safety_level', 'total_tweets', 'total_likes', 'total_replies', 'total_retweets', 'media_value', 'average_cpe', 'average_cpm', 'best_performing_tweets', 'most_used_hashtags', 'tweets_count'],
+            await this.influencerRepository.update(influencerId,
+                ['total_tweets', 'engagement_rate', 'average_impressions', 'impressions', 'interactions', 'reach', 'reachability', 'quality_audience', 'authentic_engagement', 'brand_safety_level', 'total_tweets', 'total_likes', 'total_replies', 'total_retweets', 'media_value', 'average_cpe', 'average_cpm', 'best_performing_tweets', 'most_used_hashtags', 'additional_data'],
                 [extractedData?.tweets_count,
                     engagement_rate,
                     average_impressions,
@@ -207,8 +207,8 @@ export default class TwitterInfluencerExtractorMainController {
                     media_value,
                     average_cpe,
                     average_cpm,
-                    best_performing_tweets,
-                    most_used_hashtags,
+                JSON.stringify(best_performing_tweets),
+                most_used_hashtags.join(','),
                 JSON.stringify(additionalData)]);
 
         } catch (e) {
@@ -235,9 +235,10 @@ export default class TwitterInfluencerExtractorMainController {
     }
 
     async handleProcessInfluencerCheck(user: any, minFollowersCount: number, category: any, geocode: string, fetchFriends = true) {
-        if (user.followers_count >= minFollowersCount) {
+
+        if (user.public_metrics?.followers_count >= minFollowersCount) {
             // Fetch user tweets
-            const influencerTweets = await this.twitterService.fetchV2UserTweets(user.id_str);
+            const influencerTweets = await this.twitterService.fetchV2UserTweets(user.id);
             // console.log({ influencerTweets })
 
             const keywords = category.keywords.split(', ');
@@ -249,11 +250,12 @@ export default class TwitterInfluencerExtractorMainController {
                 // console.log({ fetchFriends, user: user.screen_name })
                 // TODO: Also check if the keyword is in the bio.
                 // ALSO:: Check handle
-                console.log("Bio FILTERED:", { user: user.screen_name })
+                console.log("Bio FILTERED:", { user: user.username })
 
                 // Get user location using IPINFO??
                 const insertedUser = await this.influencerRepository.store(user, category.id, geocode, searchLocation);
 
+                console.log({ insertedUser });
                 if (insertedUser) {
                     await this.categoryRepository.store(insertedUser.id, category.id)
 
@@ -267,11 +269,15 @@ export default class TwitterInfluencerExtractorMainController {
 
             } else {
 
-                const userQualifiesAsInfluencer = await this.checkUserQualifiesAsInfluencer(influencerTweets, category);
+                // const userQualifiesAsInfluencer = await this.checkUserQualifiesAsInfluencer(influencerTweets, category);
+                const userQualifiesAsInfluencer = true;
 
+                // console.log({ userQualifiesAsInfluencer })
                 if (userQualifiesAsInfluencer) {
 
                     let insertedUser = await this.influencerRepository.store(user, category.id, geocode, searchLocation);
+
+                    console.log({ insertedUser });
 
                     if (insertedUser) {
                         await this.categoryRepository.store(insertedUser.id, category.id)
@@ -292,17 +298,17 @@ export default class TwitterInfluencerExtractorMainController {
     }
 
     async fetchInfluencerFriends(user: any, minFollowersCount: number, category: any, geocode: string) {
-        await sleep(30);
+        await sleep(3000);
 
-        const friends = await this.twitterService.fetchFollowings(user.screen_name);
+        const friends = await this.twitterService.fetchV2Followings(user.id);
         const keywords = category.keywords.split(', ')
 
         console.log('Fetching friends', { friends: friends?.users?.length ?? 0 });
 
         if (friends.users?.length > 0) {
             friends.users.forEach(async (friend: any) => {
-                await sleep();
                 await this.handleProcessInfluencerCheck(friend, minFollowersCount, category, geocode, false);
+                await sleep(10000);
             });
 
         }

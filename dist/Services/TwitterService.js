@@ -15,12 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const twitter_api_sdk_1 = require("twitter-api-sdk");
 const api_1 = __importDefault(require("../Utils/api"));
 const helpers_1 = require("../Utils/helpers");
+const sample_tweets_data_json_1 = __importDefault(require("../dump/sample_tweets_data.json"));
+const user_fields = 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld';
 const tweet_params = {
     'max_results': 100,
     // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
     'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
     'expansions': 'attachments.media_keys,attachments.poll_ids,author_id',
-    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+    'user.fields': user_fields,
     'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
     'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
     'poll.fields': 'options',
@@ -60,6 +62,21 @@ class TwitterService {
             return yield this.api.get(url, true);
         });
     }
+    fetchV2Followings(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let url = this.baseURLV2 + `users/{id}/followers`;
+                let params = {
+                    'user.fields': user_fields,
+                };
+                return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+            }
+            catch (e) {
+                console.log({ e });
+                return false;
+            }
+        });
+    }
     fetchV2Tweets(keyword, next_token = null) {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log({ userId })
@@ -71,7 +88,8 @@ class TwitterService {
                 if (next_token) {
                     params.next_token = next_token;
                 }
-                return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+                return sample_tweets_data_json_1.default;
+                //            return await this.api.get(generateQueryUrl(url, params), true);
             }
             catch (e) {
                 console.log({ e });
@@ -105,16 +123,17 @@ class TwitterService {
                     // 'tweet.fields': 'attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld',
                     'tweet.fields': 'context_annotations,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,source,text,withheld',
                     'expansions': 'attachments.media_keys,attachments.poll_ids',
-                    'user.fields': 'created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld',
+                    'user.fields': user_fields,
                     'media.fields': 'duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width',
                     'place.fields': 'contained_within,country,country_code,full_name,geo,id,name,place_type',
                     'poll.fields': 'options',
                     'exclude': 'retweets,replies',
                 };
-                return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
+                return sample_tweets_data_json_1.default;
+                // return await this.api.get(generateQueryUrl(url, params), true);
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });

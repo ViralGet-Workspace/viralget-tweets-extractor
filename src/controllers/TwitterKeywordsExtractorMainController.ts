@@ -128,6 +128,7 @@ export default class TwitterKeywordsExtractorMainController {
 
         const response = await this.twitterService.fetchV2Tweets(keyword, next_token);
 
+        console.log({ x: response.data });
         this.logger.debug('all data found ' + JSON.stringify(response.data.length))
         // console.log({ length: tweets.length, data: response.data })
 
