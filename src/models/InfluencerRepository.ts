@@ -20,7 +20,7 @@ export default class InfluencerRepository extends BaseRepository {
             return result[0];
 
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -39,7 +39,7 @@ export default class InfluencerRepository extends BaseRepository {
             return result[0];
 
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -105,13 +105,13 @@ export default class InfluencerRepository extends BaseRepository {
                 values: [...values, userId],
             }
 
-            console.log({ query })
+            // console.log({ query })
             const result = await this.db.query(query);
 
             return result[0];
 
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }

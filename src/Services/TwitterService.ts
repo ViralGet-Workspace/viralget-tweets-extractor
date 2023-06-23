@@ -85,7 +85,7 @@ export default class TwitterService {
 
             return await this.api.get(generateQueryUrl(url, params), true);
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -110,7 +110,7 @@ export default class TwitterService {
             return sampleTweets;
             //            return await this.api.get(generateQueryUrl(url, params), true);
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -127,7 +127,7 @@ export default class TwitterService {
 
             return await this.api.get(generateQueryUrl(url, params), true);
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }

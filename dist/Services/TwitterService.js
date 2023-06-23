@@ -72,7 +72,7 @@ class TwitterService {
                 return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -92,7 +92,7 @@ class TwitterService {
                 //            return await this.api.get(generateQueryUrl(url, params), true);
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -108,7 +108,7 @@ class TwitterService {
                 return yield this.api.get((0, helpers_1.generateQueryUrl)(url, params), true);
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });

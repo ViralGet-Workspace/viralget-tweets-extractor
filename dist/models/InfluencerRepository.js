@@ -28,7 +28,7 @@ class InfluencerRepository extends BaseRepository_1.default {
                 return result[0];
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -44,7 +44,7 @@ class InfluencerRepository extends BaseRepository_1.default {
                 return result[0];
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -92,12 +92,12 @@ class InfluencerRepository extends BaseRepository_1.default {
                     text: `UPDATE twitter_influencers SET ${_fields} WHERE id = ?`,
                     values: [...values, userId],
                 };
-                console.log({ query });
+                // console.log({ query })
                 const result = yield this.db.query(query);
                 return result[0];
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });

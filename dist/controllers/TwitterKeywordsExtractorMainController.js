@@ -34,7 +34,7 @@ class TwitterKeywordsExtractorMainController {
                     this.logger.debug('No tweets found');
                     return false;
                 }
-                console.log({ data });
+                // console.log({ data })
                 // this.logger.debug({ tweets: data.length, })
                 let metricsExtractor = new TwitterKeywordsMetricsExtractor_1.default(data);
                 const extractedData = yield metricsExtractor.extract();
@@ -113,7 +113,7 @@ class TwitterKeywordsExtractorMainController {
         return __awaiter(this, void 0, void 0, function* () {
             this.runCount += 1;
             const response = yield this.twitterService.fetchV2Tweets(keyword, next_token);
-            console.log({ x: response.data });
+            // console.log({ x: response.data });
             this.logger.debug('all data found ' + JSON.stringify(response.data.length));
             // console.log({ length: tweets.length, data: response.data })
             // || !response?.meta?.next_token 

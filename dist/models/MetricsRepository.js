@@ -69,7 +69,7 @@ class MetricsRepository extends BaseRepository_1.default {
                 yield this.db.query(query);
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -86,7 +86,7 @@ class MetricsRepository extends BaseRepository_1.default {
                 return result[0];
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e })
                 return false;
             }
         });
@@ -102,7 +102,7 @@ class MetricsRepository extends BaseRepository_1.default {
                 return result;
             }
             catch (e) {
-                console.log({ e });
+                // console.log({ e });
                 return false;
             }
         });

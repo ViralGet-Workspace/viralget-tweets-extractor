@@ -21,7 +21,7 @@ class TwitterKeywordsMetricsExtractor {
         return __awaiter(this, void 0, void 0, function* () {
             const data = {
                 impressions: this.getTotalImpressionCount(),
-                reach: (_a = this.getReach()) === null || _a === void 0 ? void 0 : _a.toFixed(0),
+                reach: (_a = this.getReach()) === null || _a === void 0 ? void 0 : _a.toFixed(2),
                 campaign_value: this.getCampaignValue(),
                 engagement_rate: (_b = this.getEngagementRate()) === null || _b === void 0 ? void 0 : _b.toFixed(2),
                 engagements: (_c = this.getTotalEngagements()) === null || _c === void 0 ? void 0 : _c.toFixed(0),
@@ -208,6 +208,7 @@ class TwitterKeywordsMetricsExtractor {
         return hashtags.slice(0, 5);
     }
     getReach() {
+        console.log({ calcReach: this.getTotalImpressionCount() });
         return this.getTotalImpressionCount() / 3;
     }
     getReachability() {

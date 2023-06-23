@@ -17,7 +17,7 @@ export default class TwitterKeywordsMetricsExtractor {
     public async extract() {
         const data = {
             impressions: this.getTotalImpressionCount(),
-            reach: this.getReach()?.toFixed(0),
+            reach: this.getReach()?.toFixed(2),
             campaign_value: this.getCampaignValue(),
             engagement_rate: this.getEngagementRate()?.toFixed(2),
             engagements: this.getTotalEngagements()?.toFixed(0),
@@ -245,6 +245,7 @@ export default class TwitterKeywordsMetricsExtractor {
     }
 
     getReach() {
+        console.log({ calcReach: this.getTotalImpressionCount() })
         return this.getTotalImpressionCount() / 3;
     }
 

@@ -41,7 +41,7 @@ export default class TwitterKeywordsExtractorMainController {
                 return false;
             }
 
-            console.log({ data })
+            // console.log({ data })
             // this.logger.debug({ tweets: data.length, })
 
             let metricsExtractor = new TwitterKeywordsMetricsExtractor(data);
@@ -128,7 +128,7 @@ export default class TwitterKeywordsExtractorMainController {
 
         const response = await this.twitterService.fetchV2Tweets(keyword, next_token);
 
-        console.log({ x: response.data });
+        // console.log({ x: response.data });
         this.logger.debug('all data found ' + JSON.stringify(response.data.length))
         // console.log({ length: tweets.length, data: response.data })
 

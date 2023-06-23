@@ -79,7 +79,7 @@ export default class MetricsRepository extends BaseRepository {
             await this.db.query(query);
 
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -102,7 +102,7 @@ export default class MetricsRepository extends BaseRepository {
             return result[0];
 
         } catch (e) {
-            console.log({ e })
+            // console.log({ e })
 
             return false;
         }
@@ -122,7 +122,7 @@ export default class MetricsRepository extends BaseRepository {
             return result;
 
         } catch (e) {
-            console.log({ e });
+            // console.log({ e });
 
             return false;
         }
